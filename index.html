@@ -1,0 +1,2069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOWORRIES — Indian Wedding Management Platform</title>
+  <meta name="description" content="NOWORRIES connects Hosts, Guests, and Caterers for flawless Indian wedding attendance, dietary planning, and celebration management.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS & SYSTEM VARIABLES (Extracted from Reference Design)
+       ========================================================================== */
+    :root {
+      --bg-cream: #FAF7F2;
+      --bg-card: #FFFFFF;
+      --bg-sage-light: #E5ECE7;
+      --bg-sage-banner: #D5E0D8;
+      --bg-sage-pill: #E2ECE5;
+      
+      --color-charcoal: #1E1B18;
+      --color-text-muted: #5F5953;
+      --color-rust: #BF4F16;
+      --color-rust-hover: #A54211;
+      --color-sage-btn: #94A38E;
+      --color-sage-btn-hover: #83937D;
+      --color-border-warm: #D4CBBD;
+      --color-border-light: #E8E2D8;
+      --color-accent-blue: #2D68C4;
+      
+      --font-display: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      
+      --shadow-subtle: 0 4px 20px rgba(45, 35, 25, 0.04);
+      --shadow-card: 0 10px 30px rgba(35, 25, 15, 0.06);
+      --shadow-nav: 0 8px 24px rgba(30, 25, 20, 0.08);
+      
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+      
+      --nav-height: 76px;
+      --max-width: 1240px;
+    }
+
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--color-charcoal);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      border: none;
+      background: none;
+      transition: all 0.25s ease;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ==========================================================================
+       TYPOGRAPHY
+       ========================================================================== */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3.8vw, 3.25rem);
+      font-weight: 700;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      color: var(--color-charcoal);
+      margin-bottom: 14px;
+    }
+
+    .section-title-center {
+      text-align: center;
+    }
+
+    .section-subtitle-rust {
+      color: var(--color-rust);
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .section-desc {
+      color: var(--color-text-muted);
+      font-size: 1.05rem;
+      max-width: 680px;
+      line-height: 1.65;
+    }
+
+    .section-desc-center {
+      text-align: center;
+      margin: 0 auto;
+    }
+
+    /* ==========================================================================
+       BUTTONS & CHIPS
+       ========================================================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 11px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-rust {
+      background-color: var(--color-rust);
+      color: #FFFFFF;
+    }
+    .btn-rust:hover {
+      background-color: var(--color-rust-hover);
+      box-shadow: 0 6px 16px rgba(191, 79, 22, 0.3);
+    }
+
+    .btn-sage {
+      background-color: var(--color-sage-btn);
+      color: #FFFFFF;
+    }
+    .btn-sage:hover {
+      background-color: var(--color-sage-btn-hover);
+      box-shadow: 0 6px 16px rgba(148, 163, 142, 0.35);
+    }
+
+    .btn-outline-warm {
+      background-color: #FFFFFF;
+      color: var(--color-charcoal);
+      border: 1.5px solid var(--color-border-warm);
+    }
+    .btn-outline-warm:hover {
+      background-color: #FAF5EE;
+      border-color: var(--color-rust);
+      color: var(--color-rust);
+    }
+
+    /* ==========================================================================
+       FLOATING NAVIGATION BAR
+       ========================================================================== */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: var(--nav-height);
+      background-color: rgba(250, 247, 242, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 1000;
+      border-bottom: 1px solid rgba(212, 203, 189, 0.35);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+    }
+
+    .site-header.header-hidden {
+      transform: translateY(-100%);
+    }
+
+    .site-header.header-scrolled {
+      box-shadow: var(--shadow-nav);
+      background-color: rgba(250, 247, 242, 0.98);
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      padding: 0 32px;
+      max-width: 1360px;
+      margin: 0 auto;
+    }
+
+    /* Brand Logo Area */
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-placeholder-box {
+      width: 38px;
+      height: 38px;
+      background-color: var(--color-accent-blue);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      position: relative;
+      box-shadow: 0 3px 8px rgba(45, 104, 196, 0.25);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--color-charcoal);
+    }
+
+
+
+    /* Nav Actions (Right) */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .btn-sign-in {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      padding: 6px 10px;
+    }
+    .btn-sign-in:hover {
+      color: var(--color-rust);
+    }
+
+    .btn-sign-up-nav {
+      background-color: var(--color-sage-btn);
+      color: #FFFFFF;
+      padding: 8px 22px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+    .btn-sign-up-nav:hover {
+      background-color: var(--color-sage-btn-hover);
+    }
+
+    /* Hamburger Toggle Button */
+    .nav-toggle-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 26px;
+      height: 18px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-left: 6px;
+      z-index: 1010;
+    }
+
+    .nav-toggle-btn span {
+      display: block;
+      width: 100%;
+      height: 2.2px;
+      background-color: var(--color-charcoal);
+      border-radius: 2px;
+      transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+      transform-origin: center;
+    }
+
+    /* Animated Cross on open */
+    .nav-toggle-btn.active span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+    .nav-toggle-btn.active span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    .nav-toggle-btn.active span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* Dropdown Overlay Menu */
+    .nav-dropdown-overlay {
+      position: fixed;
+      top: var(--nav-height);
+      left: 0;
+      width: 100%;
+      background-color: rgba(250, 247, 242, 0.98);
+      border-bottom: 2px solid var(--color-border-warm);
+      box-shadow: var(--shadow-nav);
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transition: max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 999;
+    }
+
+    .nav-dropdown-overlay.open {
+      max-height: 85vh;
+      opacity: 1;
+      visibility: visible;
+      overflow-y: auto;
+    }
+
+    .nav-dropdown-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 36px 32px 48px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 36px;
+    }
+
+    .nav-group-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-rust);
+      font-weight: 700;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--color-border-light);
+      padding-bottom: 6px;
+    }
+
+    .nav-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .nav-links-list a {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-links-list a:hover {
+      color: var(--color-rust);
+      transform: translateX(4px);
+    }
+
+    .brand-logo-img {
+      max-height: 38px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    .author-avatar-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ==========================================================================
+       SECTION 1: HERO (Image 7)
+       ========================================================================== */
+    .hero-section {
+      padding-top: calc(var(--nav-height) + 52px);
+      padding-bottom: 80px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1.15fr;
+      align-items: center;
+      gap: 52px;
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 4.4vw, 3.85rem);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+      color: var(--color-charcoal);
+      margin-bottom: 16px;
+    }
+
+    .hero-subheadline {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 2.3vw, 1.85rem);
+      font-weight: 600;
+      color: #2F2A25;
+      margin-bottom: 18px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-copy {
+      font-size: 1.12rem;
+      line-height: 1.65;
+      color: var(--color-text-muted);
+      margin-bottom: 38px;
+      max-width: 520px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .btn-hero-host {
+      border: 1.5px solid var(--color-border-warm);
+      background-color: #FFFFFF;
+      color: #38312B;
+      border-radius: var(--radius-sm);
+      padding: 12px 22px;
+      font-weight: 600;
+    }
+    .btn-hero-host:hover {
+      border-color: var(--color-rust);
+      color: var(--color-rust);
+    }
+
+    .btn-hero-guest {
+      background-color: var(--color-rust);
+      color: #FFFFFF;
+      border-radius: var(--radius-sm);
+      padding: 12px 22px;
+      font-weight: 600;
+    }
+    .btn-hero-guest:hover {
+      background-color: var(--color-rust-hover);
+    }
+
+    .btn-hero-caterer {
+      background-color: var(--color-sage-btn);
+      color: #FFFFFF;
+      border-radius: var(--radius-sm);
+      padding: 12px 22px;
+      font-weight: 600;
+    }
+    .btn-hero-caterer:hover {
+      background-color: var(--color-sage-btn-hover);
+    }
+
+    .hero-visual-col {
+      position: relative;
+    }
+
+    .hero-art-container {
+      width: 100%;
+      min-height: 480px;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      position: relative;
+    }
+
+    /* ==========================================================================
+       SECTION 2: THE WEDDING CHAOS IS REAL (Image 5)
+       ========================================================================== */
+    .chaos-section {
+      padding: 85px 0;
+      position: relative;
+    }
+
+    .chaos-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .chaos-visual-container {
+      width: 100%;
+      min-height: 420px;
+      border-radius: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .chaos-bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .chaos-bullet-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--color-charcoal);
+    }
+
+    .chaos-arrow {
+      color: var(--color-charcoal);
+      font-size: 1.3rem;
+      line-height: 1;
+    }
+
+    /* ==========================================================================
+       SECTION 3: BRINGING BACK YOUR PEACE (Image 4)
+       ========================================================================== */
+    .peace-section {
+      padding: 85px 0;
+      position: relative;
+    }
+
+    .peace-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.2fr;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .peace-btn {
+      margin-top: 36px;
+      padding: 13px 30px;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+    }
+
+    .peace-visual-container {
+      width: 100%;
+      min-height: 460px;
+      border-radius: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      position: relative;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE & PRODUCTION-READY IMAGE STYLING
+       ========================================================================== */
+    .landing-fluid-img,
+    .hero-main-img,
+    .chaos-main-img,
+    .peace-main-img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: contain;
+      display: block;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      mix-blend-mode: multiply;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Graceful empty image state: prevents broken image icons before a URL is pasted */
+    img:not([src]),
+    img[src=""] {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Seamless open visual styles for sections 1, 2, and 3 */
+    .hero-art-container img,
+    .chaos-visual-container img,
+    .peace-visual-container img,
+    .hero-art-container svg,
+    .chaos-visual-container svg,
+    .peace-visual-container svg {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      mix-blend-mode: multiply;
+    }
+
+    /* ==========================================================================
+       SECTION 4: SEAMLESS COORDINATION
+       ========================================================================== */
+    .coordination-section {
+      padding: 90px 0;
+      position: relative;
+    }
+
+    .coordination-header {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto 56px;
+    }
+
+    .coordination-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-bottom: 48px;
+    }
+
+    .coord-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border-light);
+      box-shadow: var(--shadow-subtle);
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .coord-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .coord-img-box {
+      width: 100%;
+      height: 230px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 22px;
+      background: #F8F5EE;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .coord-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: var(--radius-sm);
+      transition: transform 0.3s ease;
+    }
+
+    .coord-card:hover .coord-card-img {
+      transform: scale(1.02);
+    }
+
+    .coord-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--color-charcoal);
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .coord-bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .coord-bullet-item {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .coord-bullet-item::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--color-rust);
+      font-size: 1.2rem;
+      line-height: 1;
+      top: -1px;
+    }
+
+    .host-hub-preview-banner {
+      width: 100%;
+      min-height: 280px;
+      border-radius: var(--radius-md);
+      background: #F9F7F1;
+      border: 1px solid var(--color-border-warm);
+      box-shadow: var(--shadow-subtle);
+      margin-top: 16px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .host-hub-banner-img {
+      width: 100%;
+      height: 100%;
+      max-height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ==========================================================================
+       SECTION 5: TAILORED PLANNING FOR EVERYONE (Image 1)
+       ========================================================================== */
+    .tailored-section {
+      padding: 85px 0 95px;
+      background: linear-gradient(180deg, var(--bg-cream) 0%, #F5F1E7 100%);
+    }
+
+    .tailored-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .tailored-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 34px 24px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(220, 212, 200, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .tailored-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 36px rgba(40, 30, 20, 0.09);
+    }
+
+    .tailored-icon-box {
+      width: 86px;
+      height: 86px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .tailored-icon-img {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .tailored-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-charcoal);
+      margin-bottom: 10px;
+    }
+
+    .tailored-card-desc {
+      font-size: 0.94rem;
+      color: var(--color-text-muted);
+      line-height: 1.55;
+    }
+
+    /* ==========================================================================
+       SECTION 6: WHO WE SERVE (Image 6)
+       ========================================================================== */
+    .process-section {
+      padding: 95px 0;
+      position: relative;
+    }
+
+    .process-steps-wrapper {
+      margin-top: 64px;
+      position: relative;
+    }
+
+    .process-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 36px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Connecting curved dotted lines */
+    .process-connector-line {
+      position: absolute;
+      top: 55px;
+      left: 18%;
+      right: 18%;
+      height: 2px;
+      border-top: 2px dashed #D0C6B5;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .step-badge-circle {
+      width: 104px;
+      height: 104px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 26px;
+      box-shadow: 0 8px 24px rgba(45, 35, 25, 0.08);
+      border: 3px solid #FFFFFF;
+    }
+
+    .step-badge-img {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      display: block;
+      border-radius: 50%;
+    }
+
+    .step-badge-sage {
+      background-color: #E2ECE5;
+      color: #384236;
+    }
+
+    .step-badge-rust {
+      background-color: var(--color-rust);
+      color: #FFFFFF;
+    }
+
+    .step-number-pill {
+      position: absolute;
+      left: -6px;
+      top: 4px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--color-charcoal);
+    }
+
+    .step-badge-rust .step-number-pill {
+      background: #FFFFFF;
+      color: var(--color-rust);
+    }
+
+    .step-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--color-charcoal);
+      margin-bottom: 12px;
+    }
+
+    .step-desc {
+      font-size: 0.98rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      max-width: 310px;
+    }
+
+    /* ==========================================================================
+       SECTION 7: TESTIMONIALS (Authentic Real Stories)
+       ========================================================================== */
+    .testimonials-section {
+      padding: 85px 0;
+      background: #FAF6F0;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: 48px;
+    }
+
+    .testimonial-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      padding: 32px 28px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--color-border-light);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .testimonial-quote {
+      font-size: 1.02rem;
+      color: #3D3730;
+      line-height: 1.65;
+      font-style: italic;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .testimonial-author-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-top: 1px solid var(--color-border-light);
+      padding-top: 18px;
+    }
+
+    .author-avatar-placeholder {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: var(--bg-sage-pill);
+      color: var(--color-charcoal);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .author-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--color-charcoal);
+    }
+
+    .author-role {
+      font-size: 0.82rem;
+      color: var(--color-rust);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       SECTION 8: FAQ (Image 2)
+       ========================================================================== */
+    .faq-section {
+      padding: 85px 0 100px;
+      position: relative;
+    }
+
+    .faq-accordion-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 960px;
+      margin: 44px auto 0;
+    }
+
+    .faq-item {
+      background-color: var(--bg-sage-pill);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      transition: all 0.25s ease;
+      border: 1px solid rgba(160, 178, 165, 0.25);
+    }
+
+    .faq-header {
+      width: 100%;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      text-align: left;
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--color-charcoal);
+    }
+
+    .faq-header:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .faq-toggle-icon {
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--color-rust);
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+
+    .faq-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s ease;
+      background-color: transparent;
+    }
+
+    .faq-item.active .faq-body {
+      max-height: 240px;
+      padding: 0 24px 22px;
+    }
+
+    .faq-answer-text {
+      font-size: 1rem;
+      color: #38332E;
+      line-height: 1.65;
+    }
+
+    /* ==========================================================================
+       SECTION 9: FINAL CTA BANNER & FOOTER (Image 3)
+       ========================================================================== */
+    .cta-banner-section {
+      padding: 40px 0 0;
+    }
+
+    .cta-banner-card {
+      background-color: var(--bg-sage-banner);
+      border-radius: var(--radius-md);
+      padding: 68px 32px;
+      text-align: center;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .cta-banner-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3.8vw, 3.1rem);
+      font-weight: 700;
+      color: var(--color-charcoal);
+      margin-bottom: 24px;
+    }
+
+    .cta-banner-btn {
+      padding: 13px 34px;
+      font-size: 1.05rem;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Footer */
+    .site-footer {
+      background-color: var(--bg-cream);
+      padding: 70px 0 45px;
+      border-top: 1px solid var(--color-border-light);
+    }
+
+    .footer-columns-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
+      gap: 48px;
+      margin-bottom: 50px;
+    }
+
+    .footer-brand-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--color-charcoal);
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .footer-tagline {
+      font-size: 0.96rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      max-width: 260px;
+    }
+
+    .footer-col-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-charcoal);
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .footer-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .footer-nav-list a {
+      font-size: 0.94rem;
+      color: var(--color-charcoal);
+    }
+
+    .footer-nav-list a:hover {
+      color: var(--color-rust);
+    }
+
+    .whatsapp-support-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      color: var(--color-charcoal);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+    .whatsapp-support-link span {
+      text-decoration: underline;
+    }
+    .whatsapp-support-link:hover {
+      color: #128C7E;
+    }
+
+    /* Extended Footer Sub-navigation */
+    .footer-subnav-section {
+      border-top: 1px solid var(--color-border-light);
+      padding-top: 32px;
+      margin-bottom: 36px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 28px;
+    }
+
+    .footer-subnav-group-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-rust);
+      margin-bottom: 12px;
+    }
+
+    /* Social Icons & Bottom Bar */
+    .footer-bottom-bar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      border-top: 1px solid var(--color-border-light);
+      padding-top: 32px;
+    }
+
+    .social-links-row {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .social-icon-link {
+      color: var(--color-charcoal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .social-icon-link:hover {
+      color: var(--color-rust);
+      transform: translateY(-2px);
+    }
+
+    .footer-copyright {
+      font-size: 0.82rem;
+      color: #8C8479;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS (Mobile-First Polish)
+       ========================================================================== */
+    @media (max-width: 1080px) {
+      .hero-grid, .chaos-grid, .peace-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      
+      .coordination-cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tailored-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-columns-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 36px;
+      }
+
+      .process-connector-line {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --nav-height: 68px;
+      }
+
+      .hero-art-container,
+      .chaos-visual-container,
+      .peace-visual-container {
+        min-height: auto;
+      }
+
+      .landing-fluid-img,
+      .hero-main-img,
+      .chaos-main-img,
+      .peace-main-img {
+        max-height: 340px;
+      }
+
+      .coord-img-box {
+        height: 210px;
+      }
+
+      .host-hub-preview-banner {
+        min-height: 200px;
+      }
+
+
+      .tailored-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .process-steps-grid {
+        grid-template-columns: 1fr;
+        gap: 44px;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-columns-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-ctas {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .hero-ctas .btn {
+        width: 100%;
+      }
+
+      .cta-banner-card {
+        padding: 44px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       FLOATING NAVIGATION BAR (Disappears on scroll down, reappears on scroll up)
+       ========================================================================== -->
+  <header class="site-header" id="siteHeader">
+    <div class="nav-container">
+      
+      <!-- Brand & Logo -->
+      <a href="#hero" class="brand-group" aria-label="NOWORRIES Home">
+        <!-- Paste brand logo image URL into src below: -->
+        <!-- <img src="" alt="NOWORRIES Logo" class="brand-logo-img"> -->
+        <div class="logo-placeholder-box" title="NOWORRIES Logo Placeholder">
+          <span>NW</span>
+        </div>
+        <span class="brand-name">NOWORRIES</span>
+      </a>
+
+
+      <!-- Right Action Items: Sign In, Sign Up & Hamburger -->
+      <div class="nav-actions">
+        <a href="#" class="btn-sign-in" id="navSignIn">Sign In</a>
+        <a href="#" class="btn btn-sign-up-nav" id="navSignUp">Sign Up</a>
+        
+        <!-- Accessible 3-line hamburger menu transforming into an X -->
+        <button class="nav-toggle-btn" id="navToggleBtn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navDropdownOverlay">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Dropdown Navigation Overlay (Revealed on hamburger click) -->
+    <div class="nav-dropdown-overlay" id="navDropdownOverlay">
+      <div class="nav-dropdown-inner">
+        <div>
+          <div class="nav-group-title">Explore Sections</div>
+          <ul class="nav-links-list">
+            <li><a href="#hero" class="menu-link">Home / Hero</a></li>
+            <li><a href="#problem" class="menu-link">The Problem (Chaos)</a></li>
+            <li><a href="#peace" class="menu-link">Bringing Your Peace</a></li>
+            <li><a href="#coordination" class="menu-link">Seamless Coordination</a></li>
+            <li><a href="#tailored" class="menu-link">Tailored Planning</a></li>
+            <li><a href="#process" class="menu-link">Who We Serve</a></li>
+            <li><a href="#testimonials" class="menu-link">Testimonials</a></li>
+            <li><a href="#faq" class="menu-link">Frequently Asked Questions</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="nav-group-title">Portals & Entry</div>
+          <ul class="nav-links-list">
+            <li><a href="host/index.html" class="menu-link">Host Portal (Create & Manage)</a></li>
+            <li><a href="guest/index.html" class="menu-link">Guest Portal (RSVP & Diet)</a></li>
+            <li><a href="caterer/index.html" class="menu-link">Caterer Portal (Kitchen Live)</a></li>
+            <li><a href="#" class="menu-link">Forgot Password</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="nav-group-title">Legal & Security</div>
+          <ul class="nav-links-list">
+            <li><a href="#" class="menu-link">Privacy Policy</a></li>
+            <li><a href="#" class="menu-link">Terms and Conditions</a></li>
+            <li><a href="#" class="menu-link">Refund Policy</a></li>
+            <li><a href="#" class="menu-link">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN PAGE CONTENT (Exact Reference Sequence)
+       ========================================================================== -->
+  <main id="mainContent">
+
+    <!-- 1. HERO / HOME SECTION (Reference: media_1795286421560_69ed4c3a.jpg) -->
+    <section class="hero-section" id="hero">
+      <div class="container">
+        <div class="hero-grid">
+          
+          <!-- Left Column: Copy & Role-Specific Actions -->
+          <div class="hero-content-col">
+            <h1 class="hero-headline">Your Celebration, Flawlessly Managed.</h1>
+            <div class="hero-subheadline">Culture. Community. No Worries.</div>
+            <p class="hero-copy">
+              The premier platform for Indian weddings, bringing together hosts, guests, and caterers for stress-free celebration planning.
+            </p>
+
+            <!-- Three Distinct Role Actions as specified in requirements -->
+            <div class="hero-ctas">
+              <a href="host/index.html" class="btn btn-hero-host" id="heroHostBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Join as Host
+              </a>
+              <a href="guest/index.html" class="btn btn-hero-guest" id="heroGuestBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                Join as Guest
+              </a>
+              <a href="caterer/index.html" class="btn btn-hero-caterer" id="heroCatererBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"></path><line x1="6" y1="17" x2="18" y2="17"></line></svg>
+                Join as Caterer
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column: Hero Illustration -->
+          <div class="hero-visual-col">
+            <div class="hero-art-container" id="heroImagePlaceholder">
+              <!-- Paste your Hero Bride & Groom image URL into src below: -->
+              <img src="assets/landing_page/reference/b&g.png" alt="Bride & Groom Wedding Illustration" class="landing-fluid-img hero-main-img">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. THE PROBLEM (CHAOS) SECTION (Reference: media_1795286421470_9e4e6236.jpg) -->
+    <section class="chaos-section" id="problem">
+      <div class="container">
+        <div class="chaos-grid">
+          
+          <!-- Left Column: Chaos Illustration -->
+          <div class="chaos-visual-col">
+            <div class="chaos-visual-container" id="chaosImagePlaceholder">
+              <!-- Paste your Wedding Chaos image URL into src below: -->
+              <img src="assets/landing_page/reference/chaos.png" alt="The Wedding Chaos Illustration" class="landing-fluid-img chaos-main-img">
+            </div>
+          </div>
+
+          <!-- Right Column: Heading, Description & Bullets -->
+          <div class="chaos-content-col">
+            <h2 class="section-title">The Wedding Chaos is Real.</h2>
+            <p class="section-desc">
+              Managing an Indian wedding means juggling endless moving parts. We're on a mission to replace stress with celebration, turning logistical chaos into effortless coordination.
+            </p>
+
+            <ul class="chaos-bullet-list">
+              <li class="chaos-bullet-item">
+                <span class="chaos-arrow">➤</span>
+                <span>Managing Caterers</span>
+              </li>
+              <li class="chaos-bullet-item">
+                <span class="chaos-arrow">➤</span>
+                <span>Managing Guests</span>
+              </li>
+              <li class="chaos-bullet-item">
+                <span class="chaos-arrow">➤</span>
+                <span>Managing Event Planner</span>
+              </li>
+              <li class="chaos-bullet-item">
+                <span class="chaos-arrow">➤</span>
+                <span>Managing Decorators</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. BRINGING BACK YOUR PEACE IS OUR PRIORITY (Reference: media_1795286421438_89d9487a.jpg) -->
+    <section class="peace-section" id="peace">
+      <div class="container">
+        <div class="peace-grid">
+          
+          <!-- Left Column: Title & Mission Button -->
+          <div class="peace-content-col">
+            <h2 class="section-title" style="max-width: 440px;">Bringing Back Your Peace is Our Priority</h2>
+            <button class="btn btn-rust peace-btn" id="discoverMissionBtn">
+              Discover Our Mission
+            </button>
+          </div>
+
+          <!-- Right Column: Peace Illustration -->
+          <div class="peace-visual-col">
+            <div class="peace-visual-container" id="peaceImagePlaceholder">
+              <!-- Paste your Peace & Priority image URL into src below: -->
+              <img src="assets/landing_page/reference/mission.png" alt="Bringing Back Peace Illustration" class="landing-fluid-img peace-main-img">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. SEAMLESS COORDINATION FOR YOUR CELEBRATION (Reference: media_1795286421589_cfe7effa.jpg) -->
+    <section class="coordination-section" id="coordination">
+      <div class="container">
+        
+        <!-- Header -->
+        <div class="coordination-header">
+          <h2 class="section-title">Seamless Coordination For Your Celebration</h2>
+          <div class="section-subtitle-rust">How Hosts, Guests, and Caterers stay in perfect harmony.</div>
+          <p class="section-desc section-desc-center">
+            NOWORRIES brings every side of your wedding into one intuitive platform—replacing endless chats and lost spreadsheets with real-time updates and effortless planning.
+          </p>
+        </div>
+
+        <!-- 3 Role Columns: THE HOST, THE GUEST, THE CATERER -->
+        <div class="coordination-cards-grid">
+          
+          <!-- Column 1: THE HOST -->
+          <div class="coord-card">
+            <div class="coord-img-box">
+              <!-- Paste Host illustration image URL into src below: -->
+              <img src="assets/landing_page/coordination/host.png" alt="The Host Platform Preview" class="coord-card-img">
+            </div>
+            <div class="coord-card-title">THE HOST</div>
+            <ul class="coord-bullet-list">
+              <li class="coord-bullet-item">Custom timeline &amp; event trackers</li>
+              <li class="coord-bullet-item">Instantly coordinate with vendor teams</li>
+              <li class="coord-bullet-item">A single view for budget, guests, and venues</li>
+            </ul>
+          </div>
+
+          <!-- Column 2: THE GUEST -->
+          <div class="coord-card">
+            <div class="coord-img-box">
+              <!-- Paste Guest illustration image URL into src below: -->
+              <img src="" alt="The Guest Mobile Preview" class="coord-card-img">
+            </div>
+            <div class="coord-card-title">THE GUEST</div>
+            <ul class="coord-bullet-list">
+              <li class="coord-bullet-item">Personal RSVP &amp; dietary selection</li>
+              <li class="coord-bullet-item">Real-time itinerary &amp; event updates</li>
+              <li class="coord-bullet-item">Direct links to lodging and travel details</li>
+            </ul>
+          </div>
+
+          <!-- Column 3: THE CATERER -->
+          <div class="coord-card">
+            <div class="coord-img-box">
+              <!-- Paste Caterer illustration image URL into src below: -->
+              <img src="assets/landing_page/coordination/caterer.png" alt="The Caterer Kitchen Preview" class="coord-card-img">
+            </div>
+            <div class="coord-card-title">THE CATERER</div>
+            <ul class="coord-bullet-list">
+              <li class="coord-bullet-item">Detailed dietary and RSVP counts</li>
+              <li class="coord-bullet-item">Live dashboard for prep schedules</li>
+              <li class="coord-bullet-item">Instant guest allergy notifications</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Master Timeline / Host Hub Extended Preview Banner -->
+        <div class="host-hub-preview-banner">
+          <!-- Paste Host Hub / Timeline image URL into src below: -->
+          <img src="" alt="Master Timeline & Host Hub Analytics Preview" class="host-hub-banner-img">
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. TAILORED PLANNING FOR EVERYONE (Reference: media_1795286421364_95b0ba5c.jpg) -->
+    <section class="tailored-section" id="tailored">
+      <div class="container">
+        
+        <h2 class="section-title section-title-center">Tailored Planning for Everyone.</h2>
+
+        <div class="tailored-grid">
+          
+          <!-- Card 1: For Couples -->
+          <div class="tailored-card">
+            <div class="tailored-icon-box">
+              <!-- <img src="" alt="For Couples" class="tailored-icon-img"> -->
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="12" r="5"></circle><circle cx="15" cy="12" r="5"></circle></svg>
+            </div>
+            <h3 class="tailored-card-title">For Couples</h3>
+            <p class="tailored-card-desc">Full-service journey from "Yes!" to "I do."</p>
+          </div>
+
+          <!-- Card 2: For Families -->
+          <div class="tailored-card">
+            <div class="tailored-icon-box">
+              <!-- <img src="" alt="For Families" class="tailored-icon-img"> -->
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6a3 3 0 0 1 6 0v6"></path></svg>
+            </div>
+            <h3 class="tailored-card-title">For Families</h3>
+            <p class="tailored-card-desc">Coordinating multi-day cultural celebrations &amp; logistics.</p>
+          </div>
+
+          <!-- Card 3: For Guests -->
+          <div class="tailored-card">
+            <div class="tailored-icon-box">
+              <!-- <img src="" alt="For Guests" class="tailored-icon-img"> -->
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </div>
+            <h3 class="tailored-card-title">For Guests</h3>
+            <p class="tailored-card-desc">Seamless travel, accommodation, and event itineraries.</p>
+          </div>
+
+          <!-- Card 4: For Vendors -->
+          <div class="tailored-card">
+            <div class="tailored-icon-box">
+              <!-- <img src="" alt="For Vendors" class="tailored-icon-img"> -->
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7h-7L10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>
+            </div>
+            <h3 class="tailored-card-title">For Vendors</h3>
+            <p class="tailored-card-desc">Efficient marketplace &amp; collaborative tools for professionals.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. WHO WE SERVE (Reference: media_1795286421476_83d79cb3.jpg) -->
+    <section class="process-section" id="process">
+      <div class="container">
+        
+        <div style="text-align: center;">
+          <h2 class="section-title">Who We Serve</h2>
+          <div class="section-subtitle-rust">Your Journey to ‘I Do,’ Simplified.</div>
+        </div>
+
+        <div class="process-steps-wrapper">
+          <!-- Connecting dotted line -->
+          <div class="process-connector-line"></div>
+
+          <div class="process-steps-grid">
+            
+            <!-- Step 1 -->
+            <div class="step-item">
+              <div class="step-badge-circle step-badge-sage">
+                <span class="step-number-pill">1</span>
+                <!-- <img src="" alt="Share Your Vision" class="step-badge-img"> -->
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="m9 14 2 2 4-4"></path></svg>
+              </div>
+              <h3 class="step-title">Share Your Vision</h3>
+              <p class="step-desc">Define your date, guest count, and unique cultural requirements.</p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-item">
+              <div class="step-badge-circle step-badge-rust">
+                <span class="step-number-pill">2</span>
+                <!-- <img src="" alt="Get Your Custom Plan" class="step-badge-img"> -->
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="m9 16 2 2 4-4"></path></svg>
+              </div>
+              <h3 class="step-title">Get Your Custom Plan</h3>
+              <p class="step-desc">We match you with verified vendors and build a detailed master timeline.</p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-item">
+              <div class="step-badge-circle step-badge-sage">
+                <span class="step-number-pill">3</span>
+                <!-- <img src="" alt="Enjoy Your Celebration" class="step-badge-img"> -->
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 2 7l10 5 10-5-10-5Z"></path><path d="m2 17 10 5 10-5"></path><path d="m2 12 10 5 10-5"></path></svg>
+              </div>
+              <h3 class="step-title">Enjoy Your Celebration</h3>
+              <p class="step-desc">Relax as we execute the multi-day event flawlessly, on-site.</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 7. TESTIMONIALS SECTION (In exact sequence as requested) -->
+    <section class="testimonials-section" id="testimonials">
+      <div class="container">
+        
+        <h2 class="section-title section-title-center">Loved by Couples, Families &amp; Caterers</h2>
+        <p class="section-desc section-desc-center">
+          Real stories of peace of mind from Indian weddings hosted across the country.
+        </p>
+
+        <div class="testimonials-grid">
+          
+          <!-- Testimonial 1: Host -->
+          <div class="testimonial-card">
+            <div class="testimonial-quote">
+              "We had 650 guests across Sangeet and Reception with complex Jain, Satvik and regular menus. Having the exact dietary numbers synchronized with our caterer saved us from major food wastage and awkward last-minute shortages."
+            </div>
+            <div class="testimonial-author-box">
+              <!-- <img src="" alt="Aarav & Kavya Sharma" class="author-avatar-img"> -->
+              <div class="author-avatar-placeholder">AK</div>
+              <div>
+                <div class="author-name">Aarav &amp; Kavya Sharma</div>
+                <div class="author-role">Hosts — Udaipur Destination Wedding</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 2: Guest -->
+          <div class="testimonial-card">
+            <div class="testimonial-quote">
+              "Entering our four family members' specific dietary requirements on the circular dialer took under two minutes. Having the daily timeline and hotel details directly on my phone made navigating the 3-day wedding effortless."
+            </div>
+            <div class="testimonial-author-box">
+              <!-- <img src="" alt="Rajesh Patel" class="author-avatar-img"> -->
+              <div class="author-avatar-placeholder">RP</div>
+              <div>
+                <div class="author-name">Rajesh Patel</div>
+                <div class="author-role">Attending Guest — Mumbai</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 3: Caterer -->
+          <div class="testimonial-card">
+            <div class="testimonial-quote">
+              "As a catering head managing live counters, the real-time preparation status board meant the host family never had to interrupt the kitchen. They could see readiness live on their dashboard with complete peace of mind."
+            </div>
+            <div class="testimonial-author-box">
+              <!-- <img src="" alt="Chef Sanjay Mathur" class="author-avatar-img"> -->
+              <div class="author-avatar-placeholder">SC</div>
+              <div>
+                <div class="author-name">Chef Sanjay Mathur</div>
+                <div class="author-role">Royal Feasts Catering — Jaipur</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 8. FREQUENTLY ASKED QUESTIONS (Reference: media_1795286421404_0db8c369.jpg) -->
+    <section class="faq-section" id="faq">
+      <div class="container">
+        
+        <h2 class="section-title section-title-center">Your Questions, Answered</h2>
+
+        <div class="faq-accordion-list" role="region" aria-label="Frequently Asked Questions">
+          
+          <!-- Item 1 (Active by default as in reference) -->
+          <div class="faq-item active">
+            <button class="faq-header" aria-expanded="true">
+              <span>How does pricing work for multi-day events?</span>
+              <span class="faq-toggle-icon">+</span>
+            </button>
+            <div class="faq-body">
+              <p class="faq-answer-text">
+                Our pricing is modular, designed to scale with your specific needs, whether it's a single-day ceremony or a multi-day extravaganza. We offer transparent packages.
+              </p>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="faq-item">
+            <button class="faq-header" aria-expanded="false">
+              <span>How far in advance should we book the platform?</span>
+              <span class="faq-toggle-icon">−</span>
+            </button>
+            <div class="faq-body">
+              <p class="faq-answer-text">
+                We recommend onboarding NOWORRIES 3 to 6 months prior to your celebration. This gives your guests ample time to RSVP, submit dietary restrictions, and lock in accommodation headcounts before the kitchen preparation cut-offs.
+              </p>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="faq-item">
+            <button class="faq-header" aria-expanded="false">
+              <span>Can you help us find vendors within a specific cultural niche?</span>
+              <span class="faq-toggle-icon">−</span>
+            </button>
+            <div class="faq-body">
+              <p class="faq-answer-text">
+                Yes. NOWORRIES accommodates regional and community traditions across North, South, East, and West Indian rituals—connecting you with verified cultural specialists and caterers trained in strict Jain, Satvik, and regional cuisine requirements.
+              </p>
+            </div>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="faq-item">
+            <button class="faq-header" aria-expanded="false">
+              <span>How does NOWORRIES handle last-minute changes?</span>
+              <span class="faq-toggle-icon">−</span>
+            </button>
+            <div class="faq-body">
+              <p class="faq-answer-text">
+                Guest counts and dietary allocations synchronize directly with caterer and host dashboards in real time. For kitchen planning sanity, food preferences lock 48 hours prior to the ceremony based on the venue's local timezone.
+              </p>
+            </div>
+          </div>
+
+          <!-- Item 5 -->
+          <div class="faq-item">
+            <button class="faq-header" aria-expanded="false">
+              <span>Is the platform suitable for destination weddings in India?</span>
+              <span class="faq-toggle-icon">−</span>
+            </button>
+            <div class="faq-body">
+              <p class="faq-answer-text">
+                Absolutely. NOWORRIES was designed from the ground up for multi-event destination celebrations. It manages hotel room allotments, travel arrival windows, and multi-venue itineraries in one central hub.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 9. FINAL CTA BANNER & FOOTER (Reference: media_1795286421424_d008bfcd.jpg) -->
+    <section class="cta-banner-section">
+      <div class="container">
+        
+        <div class="cta-banner-card">
+          <h2 class="cta-banner-title">Ready to Enjoy Your Wedding Journey?</h2>
+          <button class="btn btn-rust cta-banner-btn" id="startPlanningTodayBtn">
+            Start Planning Today
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      
+      <!-- Four Primary Columns as per Reference Design -->
+      <div class="footer-columns-grid">
+        
+        <!-- Column 1: Brand & Tagline -->
+        <div>
+          <div class="footer-brand-title">NOWORRIES</div>
+          <p class="footer-tagline">
+            Your intelligent partner for every Indian celebration.
+          </p>
+        </div>
+
+        <!-- Column 2: Platform Links -->
+        <div>
+          <ul class="footer-nav-list">
+            <li><a href="#hero">Platform</a></li>
+            <li><a href="#tailored">Solutions</a></li>
+            <li><a href="#process">Culture</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Company Links -->
+        <div>
+          <ul class="footer-nav-list">
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Contact, Legal & WhatsApp -->
+        <div>
+          <ul class="footer-nav-list">
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li>
+              <a href="#" class="whatsapp-support-link" aria-label="Chat with Us on WhatsApp">
+                Need Help? <span>Chat with Us on WhatsApp</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.584 1.777.914 2.782.915 3.179 0 5.765-2.587 5.767-5.766 0-3.18-2.586-5.771-5.758-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.086s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.112.551 4.095 1.516 5.823l-1.616 5.908 6.079-1.595c1.667.909 3.57 1.424 5.597 1.424 6.627 0 12-5.373 12-12s-5.373-12-12-12z"/></svg>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Extended Group Links required by requirements -->
+      <div class="footer-subnav-section">
+        <div>
+          <div class="footer-subnav-group-title">Explore NOWORRIES</div>
+          <ul class="footer-nav-list">
+            <li><a href="#hero">Hero &amp; Overview</a></li>
+            <li><a href="#problem">Wedding Chaos</a></li>
+            <li><a href="#peace">Peace &amp; Priority</a></li>
+            <li><a href="#coordination">Three-Way Coordination</a></li>
+            <li><a href="#tailored">Tailored Planning</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-subnav-group-title">Join NOWORRIES</div>
+          <ul class="footer-nav-list">
+            <li><a href="host/index.html">Join as Host</a></li>
+            <li><a href="guest/index.html">Join as Guest</a></li>
+            <li><a href="caterer/index.html">Join as Caterer</a></li>
+            <li><a href="#">Event Access with 12-char ID</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-subnav-group-title">Legal &amp; Compliance</div>
+          <ul class="footer-nav-list">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms and Conditions</a></li>
+            <li><a href="#">Refund Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Other Legal Disclosures</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Social Media Icons & Copyright -->
+      <div class="footer-bottom-bar">
+        <div class="social-links-row">
+          <!-- Instagram -->
+          <a href="#" class="social-icon-link" aria-label="Instagram">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <!-- LinkedIn -->
+          <a href="#" class="social-icon-link" aria-label="LinkedIn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+          </a>
+          <!-- Facebook -->
+          <a href="#" class="social-icon-link" aria-label="Facebook">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
+        </div>
+        <div class="footer-copyright">
+          &copy; 2026 NOWORRIES Inc. All rights reserved. Built with precision for Indian Celebrations.
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       VANILLA JAVASCRIPT (Smart Floating Navbar, FAQ Accordion, Dropdown & Smooth Navigation)
+       ========================================================================== -->
+  <script>
+    (function() {
+      'use strict';
+
+      // 1. SMART FLOATING NAVBAR BEHAVIOR
+      // Initially visible -> scrolls down: hides upwards -> scrolls up: immediately reappears from top
+      let lastScrollTop = 0;
+      const header = document.getElementById('siteHeader');
+      const scrollThreshold = 10;
+
+      window.addEventListener('scroll', function() {
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Add subtle shadow when not at the very top
+        if (currentScroll > 15) {
+          header.classList.add('header-scrolled');
+        } else {
+          header.classList.remove('header-scrolled');
+        }
+
+        // Only trigger hide/reveal if past initial scroll
+        if (Math.abs(currentScroll - lastScrollTop) > scrollThreshold) {
+          if (currentScroll > lastScrollTop && currentScroll > 80) {
+            // Scrolling down -> hide navbar
+            header.classList.add('header-hidden');
+            closeDropdownMenu(); // Close menu if open when scrolling down
+          } else {
+            // Scrolling up -> reveal navbar
+            header.classList.remove('header-hidden');
+          }
+          lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+        }
+      }, { passive: true });
+
+      // 2. ACCESSIBLE HAMBURGER DROPDOWN MENU
+      const toggleBtn = document.getElementById('navToggleBtn');
+      const dropdownOverlay = document.getElementById('navDropdownOverlay');
+      const menuLinks = document.querySelectorAll('.menu-link');
+
+      function toggleDropdownMenu() {
+        const isOpen = dropdownOverlay.classList.contains('open');
+        if (isOpen) {
+          closeDropdownMenu();
+        } else {
+          openDropdownMenu();
+        }
+      }
+
+      function openDropdownMenu() {
+        dropdownOverlay.classList.add('open');
+        toggleBtn.classList.add('active');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+        header.classList.remove('header-hidden');
+      }
+
+      function closeDropdownMenu() {
+        dropdownOverlay.classList.remove('open');
+        toggleBtn.classList.remove('active');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      }
+
+      toggleBtn.addEventListener('click', toggleDropdownMenu);
+
+      // Close menu on link click
+      menuLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          closeDropdownMenu();
+        });
+      });
+
+      // Close menu on ESC key
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && dropdownOverlay.classList.contains('open')) {
+          closeDropdownMenu();
+        }
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!header.contains(event.target) && dropdownOverlay.classList.contains('open')) {
+          closeDropdownMenu();
+        }
+      });
+
+      // 3. FAQ ACCORDION INTERACTION
+      const faqHeaders = document.querySelectorAll('.faq-header');
+
+      faqHeaders.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const item = this.parentElement;
+          const isActive = item.classList.contains('active');
+          const toggleIcon = this.querySelector('.faq-toggle-icon');
+
+          // Close other FAQ items for a clean accordion flow
+          document.querySelectorAll('.faq-item').forEach(function(otherItem) {
+            otherItem.classList.remove('active');
+            const otherBtn = otherItem.querySelector('.faq-header');
+            const otherIcon = otherItem.querySelector('.faq-toggle-icon');
+            if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+            if (otherIcon) otherIcon.textContent = '−';
+          });
+
+          // Toggle current item
+          if (!isActive) {
+            item.classList.add('active');
+            this.setAttribute('aria-expanded', 'true');
+            if (toggleIcon) toggleIcon.textContent = '+';
+          } else {
+            item.classList.remove('active');
+            this.setAttribute('aria-expanded', 'false');
+            if (toggleIcon) toggleIcon.textContent = '−';
+          }
+        });
+      });
+
+      // 4. SMOOTH SCROLL FOR ALL ANCHOR LINKS
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+          const targetId = this.getAttribute('href');
+          if (targetId && targetId !== '#') {
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              e.preventDefault();
+              const headerOffset = 80;
+              const elementPosition = targetElement.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+              });
+            }
+          }
+        });
+      });
+
+      // 5. CONSOLE VERIFICATION & READINESS LOG
+      console.log('NOWORRIES Landing Page initialized with visual fidelity and responsive architecture.');
+    })();
+  </script>
+</body>
+</html>

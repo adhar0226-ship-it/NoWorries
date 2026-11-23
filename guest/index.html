@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOWORRIES — Guest Portal & RSVP Experience</title>
+  <meta name="description" content="Guest Portal and RSVP for NOWORRIES Indian Wedding Management Platform">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS — EXACT COLOR & VISUAL IDENTITY
+       ========================================================================== */
+    :root {
+      --bg-cream: #FAF7F2;
+      --bg-card: #FFFFFF;
+      --bg-sage-light: #E5ECE7;
+      --bg-sage-banner: #D5E0D8;
+      --bg-sage-pill: #E2ECE5;
+      
+      --color-charcoal: #1E1B18;
+      --color-text-muted: #5F5953;
+      --color-rust: #BF4F16;
+      --color-rust-hover: #A54211;
+      --color-sage-btn: #94A38E;
+      --color-sage-btn-hover: #83937D;
+      --color-border-warm: #D4CBBD;
+      --color-border-light: #E8E2D8;
+      --color-accent-blue: #2D68C4;
+      
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      
+      --shadow-subtle: 0 4px 20px rgba(45, 35, 25, 0.04);
+      --shadow-card: 0 10px 30px rgba(35, 25, 15, 0.06);
+      --shadow-dial: 0 12px 32px rgba(40, 30, 20, 0.12);
+      
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+      
+      --nav-height: 72px;
+      --max-width: 900px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--color-charcoal);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      border: none;
+      background: none;
+      transition: all 0.25s ease;
+    }
+
+    input, textarea, select {
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--color-charcoal);
+      background: #FFFFFF;
+      border: 1.5px solid var(--color-border-warm);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--color-rust);
+      box-shadow: 0 0 0 3px rgba(191, 79, 22, 0.12);
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-rust {
+      background-color: var(--color-rust);
+      color: #FFFFFF;
+    }
+    .btn-rust:hover {
+      background-color: var(--color-rust-hover);
+      box-shadow: 0 6px 16px rgba(191, 79, 22, 0.25);
+    }
+
+    .btn-sage {
+      background-color: var(--color-sage-btn);
+      color: #FFFFFF;
+    }
+    .btn-sage:hover {
+      background-color: var(--color-sage-btn-hover);
+    }
+
+    .btn-outline {
+      background-color: #FFFFFF;
+      border: 1.5px solid var(--color-border-warm);
+      color: var(--color-charcoal);
+    }
+    .btn-outline:hover {
+      border-color: var(--color-rust);
+      color: var(--color-rust);
+    }
+
+    /* Header */
+    .portal-header {
+      height: var(--nav-height);
+      background-color: rgba(250, 247, 242, 0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(212, 203, 189, 0.4);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .portal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-box {
+      width: 36px;
+      height: 36px;
+      background-color: var(--color-accent-blue);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-role {
+      background-color: var(--bg-sage-pill);
+      color: #384236;
+      border: 1px solid var(--color-sage-btn);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Card Panels */
+    .card-panel {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border-warm);
+      box-shadow: var(--shadow-card);
+      padding: 32px;
+      margin-bottom: 28px;
+    }
+
+    .card-panel-title {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--color-charcoal);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* ==========================================================================
+       ROTARY / TELEPHONE NUMERIC DIALER
+       ========================================================================== */
+    .dialer-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 24px 0;
+    }
+
+    .rotary-wheel {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #FFFFFF 30%, #F5F0E6 75%, #EBE3D3 100%);
+      border: 6px solid #D8CEBD;
+      box-shadow: var(--shadow-dial), inset 0 2px 8px rgba(0,0,0,0.08);
+      position: relative;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .rotary-center-display {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 2px solid var(--color-border-warm);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .rotary-val-big {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-rust);
+      line-height: 1;
+    }
+
+    .rotary-val-sub {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* 9 Positions: 1 to 8 + C */
+    .dial-node {
+      position: absolute;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 1.5px solid var(--color-border-warm);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--color-charcoal);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .dial-node:hover:not(.disabled) {
+      background: var(--color-rust);
+      color: #FFFFFF;
+      border-color: var(--color-rust);
+      transform: scale(1.15);
+    }
+
+    .dial-node.active {
+      background: var(--color-rust);
+      color: #FFFFFF;
+      border-color: var(--color-rust);
+      transform: scale(1.15);
+      box-shadow: 0 0 0 4px rgba(191, 79, 22, 0.2);
+    }
+
+    /* Dynamically blurred and disabled when exceeding allocation */
+    .dial-node.disabled {
+      opacity: 0.28;
+      filter: blur(1.5px);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Cinematic Progressive Reveal Steps */
+    .wedding-hero-banner {
+      background: radial-gradient(circle at 60% 40%, #FFFDF8 0%, #F5ECE0 65%, #EDE2D0 100%);
+      border: 1px solid var(--color-border-warm);
+      border-radius: var(--radius-md);
+      padding: 32px 28px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .wedding-couple-headline {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--color-charcoal);
+      margin-bottom: 6px;
+    }
+
+    .wedding-meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #FFFFFF;
+      border: 1px solid var(--color-border-warm);
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    /* Dietary Category Counters */
+    .diet-alloc-item {
+      background: #FAFAFA;
+      border: 1px solid var(--color-border-light);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .diet-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .counter-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 1.5px solid var(--color-border-warm);
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .counter-btn:hover:not(:disabled) {
+      border-color: var(--color-rust);
+      color: var(--color-rust);
+    }
+
+    .counter-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .counter-num {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .summary-badge-bar {
+      background: var(--bg-sage-banner);
+      border-radius: var(--radius-sm);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0;
+      font-weight: 600;
+    }
+
+    @media (max-width: 650px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      .card-panel {
+        padding: 22px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="portal-header">
+    <div class="container portal-nav">
+      <div class="brand-group">
+        <a href="../index.html" class="brand-group">
+          <div class="logo-box">NW</div>
+          <span class="brand-title">NOWORRIES</span>
+        </a>
+        <span class="badge-role">Guest Portal</span>
+      </div>
+      <div>
+        <button id="guestLogoutBtn" class="btn btn-outline" style="display:none; padding:6px 14px; font-size:0.85rem;" onclick="handleGuestLogout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="flex:1; padding-top:32px; padding-bottom:60px;">
+
+    <!-- STAGE 1: GUEST REGISTRATION / LOGIN -->
+    <div id="guestAuthView" class="card-panel">
+      <div style="text-align:center; margin-bottom:24px;">
+        <h1 class="card-panel-title" id="authTitle">Guest Sign In</h1>
+        <p style="color:var(--color-text-muted); font-size:0.92rem;">Enter your credentials or register your family to RSVP</p>
+      </div>
+
+      <div style="display:flex; border-bottom:1px solid var(--color-border-light); margin-bottom:24px;">
+        <button id="tabGuestLogin" class="btn" style="flex:1; border-bottom:2px solid var(--color-rust); color:var(--color-rust);" onclick="toggleGuestAuthMode('login')">Sign In</button>
+        <button id="tabGuestReg" class="btn" style="flex:1; border-bottom:2px solid transparent; color:var(--color-text-muted);" onclick="toggleGuestAuthMode('register')">Register New Family</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="formGuestLogin" onsubmit="handleGuestLogin(event)">
+        <div class="form-group">
+          <label for="gLoginEmail">Email Address</label>
+          <input type="email" id="gLoginEmail" required placeholder="family@domain.com">
+        </div>
+        <div class="form-group">
+          <label for="gLoginPassword">Password</label>
+          <input type="password" id="gLoginPassword" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-rust" style="width:100%; margin-top:8px;">Sign In</button>
+      </form>
+
+      <!-- Registration Form -->
+      <form id="formGuestRegister" style="display:none;" onsubmit="handleGuestRegister(event)">
+        <div class="form-group">
+          <label for="gRegName">Head of Family Name</label>
+          <input type="text" id="gRegName" required placeholder="e.g. Rajesh Kumar Sharma">
+        </div>
+        <div class="form-group">
+          <label for="gRegAddress">Family Residential Address</label>
+          <input type="text" id="gRegAddress" required placeholder="City, State">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="gRegEmail">Email Address</label>
+            <input type="email" id="gRegEmail" required placeholder="name@domain.com">
+          </div>
+          <div class="form-group">
+            <label for="gRegPhone">Phone Number</label>
+            <input type="tel" id="gRegPhone" required placeholder="+91 98765 43210">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="gRegPwd">Password</label>
+            <input type="password" id="gRegPwd" minlength="6" required placeholder="••••••••">
+          </div>
+          <div class="form-group">
+            <label for="gRegConfirmPwd">Confirm Password</label>
+            <input type="password" id="gRegConfirmPwd" minlength="6" required placeholder="••••••••">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-rust" style="width:100%; margin-top:12px;">Create Guest Account</button>
+      </form>
+    </div>
+
+    <!-- STAGE 2: JOIN WEDDING VIA EVENT ID & 4-DIGIT PIN -->
+    <div id="joinEventView" class="card-panel" style="display:none;">
+      <h2 class="card-panel-title">Join a Wedding Celebration</h2>
+      <p style="color:var(--color-text-muted); font-size:0.92rem; margin-bottom:20px;">
+        Enter the 12-character Event ID provided by your hosts along with the 4-digit security PIN.
+      </p>
+
+      <form onsubmit="handleJoinEvent(event)">
+        <div class="form-group">
+          <label for="joinEventId">12-Character Event ID</label>
+          <input type="text" id="joinEventId" required maxlength="14" placeholder="XXXX-XXXX-XXXX" style="font-family:monospace; text-transform:uppercase; font-size:1.1rem; letter-spacing:1px;" value="NW42-7890-K912">
+        </div>
+        <div class="form-group">
+          <label for="joinPin">4-Digit Access PIN</label>
+          <input type="password" id="joinPin" required maxlength="4" pattern="[0-9]{4}" placeholder="••••" style="font-family:monospace; font-size:1.1rem; letter-spacing:4px;" value="5432">
+        </div>
+        <button type="submit" class="btn btn-rust" style="width:100%;">Access Wedding Invitation</button>
+      </form>
+    </div>
+
+    <!-- STAGE 3: PROGRESSIVE CINEMATIC WEDDING INVITATION & RSVP -->
+    <div id="eventExperienceView" style="display:none;">
+
+      <!-- 1 & 2. Host, Bride & Groom Details -->
+      <div class="wedding-hero-banner">
+        <div style="font-size:0.82rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--color-rust); font-weight:700; margin-bottom:6px;">
+          Warm Invitation from Verma &amp; Sharma Families
+        </div>
+        <h1 class="wedding-couple-headline" id="coupleHeadline">Aarav &amp; Kavya</h1>
+        <div style="font-style:italic; color:var(--color-text-muted); margin-bottom:14px;" id="welcomeMessage">
+          "With immense joy and gratitude, we invite you and your family to celebrate our holy union."
+        </div>
+        <div class="wedding-meta-pill" id="weddingMetaPill">
+          📍 The Oberoi Udaivilas, Udaipur • 🗓️ 15 Dec 2026 • 👔 Royal Traditional
+        </div>
+      </div>
+
+      <!-- Confirmed Attendance Banner (Displays between info and dietary after confirmation) -->
+      <div id="confirmedSummaryBanner" class="summary-badge-bar" style="display:none;">
+        <div>
+          <span>Your Registered Attendance: </span>
+          <strong id="badgeHeadcountText" style="color:var(--color-rust);">4 Members</strong>
+        </div>
+        <span style="font-size:0.82rem; color:var(--color-charcoal); background:#FFF; padding:4px 10px; border-radius:var(--radius-pill);">
+          Dietary locked 48h before event
+        </span>
+      </div>
+
+      <!-- 3. Interactive Rotary Dialer for Headcount -->
+      <div class="card-panel" id="headcountPanel">
+        <h2 class="card-panel-title">1. Total Attending Members</h2>
+        <p style="color:var(--color-text-muted); font-size:0.92rem; margin-bottom:18px;">
+          Select your family headcount using the interactive circular numeric dialer (1–8 or C for custom).
+        </p>
+
+        <div class="dialer-container">
+          <div class="rotary-wheel" id="rotaryWheel">
+            <!-- Center Display -->
+            <div class="rotary-center-display">
+              <span class="rotary-val-big" id="dialerSelectedVal">4</span>
+              <span class="rotary-val-sub">Attending</span>
+            </div>
+            <!-- 9 Circumference dial nodes placed mathematically -->
+          </div>
+
+          <!-- Custom Number Input if 'C' selected -->
+          <div id="customHeadcountBox" style="display:none; margin-top:10px; width:180px;">
+            <input type="number" id="customInputVal" min="1" max="50" placeholder="Enter count" onchange="applyCustomHeadcount(this.value)">
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Constrained Dietary Allocation -->
+      <div class="card-panel" id="dietaryPanel">
+        <h2 class="card-panel-title">2. Dietary Distribution</h2>
+        <p style="color:var(--color-text-muted); font-size:0.92rem; margin-bottom:12px;">
+          Distribute your attending headcount across available options. Mutually exclusive main courses cannot exceed total attendance.
+        </p>
+
+        <div style="font-weight:700; margin-bottom:16px; color:var(--color-rust);">
+          Remaining Headcount to Allocate: <span id="remainingCountDisplay" style="font-size:1.2rem;">0</span>
+        </div>
+
+        <!-- Veg -->
+        <div class="diet-alloc-item">
+          <div>
+            <div style="font-weight:700;">Vegetarian</div>
+            <div style="font-size:0.8rem; color:var(--color-text-muted);">Includes dairy &amp; farm ingredients</div>
+          </div>
+          <div class="diet-controls">
+            <button class="counter-btn" onclick="modifyDiet('veg', -1)">−</button>
+            <span class="counter-num" id="dietVegVal">3</span>
+            <button class="counter-btn" id="btnPlusVeg" onclick="modifyDiet('veg', 1)">+</button>
+          </div>
+        </div>
+
+        <!-- Jain / Satvik -->
+        <div class="diet-alloc-item">
+          <div>
+            <div style="font-weight:700;">Jain / Satvik</div>
+            <div style="font-size:0.8rem; color:var(--color-text-muted);">No onion, no garlic, no root vegetables</div>
+          </div>
+          <div class="diet-controls">
+            <button class="counter-btn" onclick="modifyDiet('jain', -1)">−</button>
+            <span class="counter-num" id="dietJainVal">1</span>
+            <button class="counter-btn" id="btnPlusJain" onclick="modifyDiet('jain', 1)">+</button>
+          </div>
+        </div>
+
+        <!-- Vegan -->
+        <div class="diet-alloc-item">
+          <div>
+            <div style="font-weight:700;">Vegan</div>
+            <div style="font-size:0.8rem; color:var(--color-text-muted);">100% plant-based, zero dairy</div>
+          </div>
+          <div class="diet-controls">
+            <button class="counter-btn" onclick="modifyDiet('vegan', -1)">−</button>
+            <span class="counter-num" id="dietVeganVal">0</span>
+            <button class="counter-btn" id="btnPlusVegan" onclick="modifyDiet('vegan', 1)">+</button>
+          </div>
+        </div>
+
+        <!-- Non-Veg -->
+        <div class="diet-alloc-item">
+          <div>
+            <div style="font-weight:700;">Non-Vegetarian</div>
+            <div style="font-size:0.8rem; color:var(--color-text-muted);">Poultry &amp; lamb (separate preparation line)</div>
+          </div>
+          <div class="diet-controls">
+            <button class="counter-btn" onclick="modifyDiet('nonveg', -1)">−</button>
+            <span class="counter-num" id="dietNonVegVal">0</span>
+            <button class="counter-btn" id="btnPlusNonVeg" onclick="modifyDiet('nonveg', 1)">+</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 5. Accommodation Requirement -->
+      <div class="card-panel">
+        <h2 class="card-panel-title">3. Hotel &amp; Lodging Accommodation</h2>
+        <p style="color:var(--color-text-muted); font-size:0.92rem; margin-bottom:14px;">
+          Do you require accommodation arranged by the hosts?
+        </p>
+
+        <div style="display:flex; gap:16px; margin-bottom:18px;">
+          <button id="btnStayNo" class="btn btn-outline" style="flex:1;" onclick="toggleStay(false)">No, staying independently</button>
+          <button id="btnStayYes" class="btn btn-rust" style="flex:1;" onclick="toggleStay(true)">Yes, accommodation required</button>
+        </div>
+
+        <div id="stayHeadcountBox" style="margin-top:12px;">
+          <label style="font-size:0.88rem; font-weight:600; display:block; margin-bottom:6px;">Members Requiring Rooms</label>
+          <input type="number" id="stayHeadcountVal" min="1" max="4" value="4">
+        </div>
+      </div>
+
+      <!-- Final Confirmation Action -->
+      <div style="text-align:center; margin-top:28px;">
+        <button class="btn btn-rust" style="padding:14px 44px; font-size:1.05rem;" onclick="submitRsvp()">
+          Confirm &amp; Submit Attendance
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==========================================================================
+       GUEST CONTROLLER & ROTARY DIALER LOGIC
+       ========================================================================== */ -->
+  <script>
+    /**
+     * CENTRALIZED API BASE CONFIGURATION
+     * Replace with your deployed Render backend URL when ready:
+     * const API_BASE_URL = "https://your-backend.onrender.com";
+     */
+    const API_BASE_URL = window.API_BASE_URL || "https://your-backend.onrender.com";
+
+    // State Variables
+    let currentGuest = null;
+    let selectedHeadcount = 4;
+    let isRsvpLocked = false;
+    let requiresAccommodation = true;
+
+    const dietaryCounts = {
+      veg: 3,
+      jain: 1,
+      vegan: 0,
+      nonveg: 0
+    };
+
+    // Toggle between Guest Login and Register
+    function toggleGuestAuthMode(mode) {
+      const isLogin = mode === 'login';
+      document.getElementById('formGuestLogin').style.display = isLogin ? 'block' : 'none';
+      document.getElementById('formGuestRegister').style.display = isLogin ? 'none' : 'block';
+      document.getElementById('tabGuestLogin').style.color = isLogin ? 'var(--color-rust)' : 'var(--color-text-muted)';
+      document.getElementById('tabGuestLogin').style.borderBottomColor = isLogin ? 'var(--color-rust)' : 'transparent';
+      document.getElementById('tabGuestReg').style.color = !isLogin ? 'var(--color-rust)' : 'var(--color-text-muted)';
+      document.getElementById('tabGuestReg').style.borderBottomColor = !isLogin ? 'var(--color-rust)' : 'transparent';
+      document.getElementById('authTitle').textContent = isLogin ? 'Guest Sign In' : 'Register New Family';
+    }
+
+    // Handle Registration
+    async function handleGuestRegister(e) {
+      e.preventDefault();
+      const pwd = document.getElementById('gRegPwd').value;
+      const confirmPwd = document.getElementById('gRegConfirmPwd').value;
+
+      if (pwd !== confirmPwd) {
+        alert('Passwords do not match.');
+        return;
+      }
+
+      currentGuest = {
+        role: 'guest',
+        name: document.getElementById('gRegName').value,
+        address: document.getElementById('gRegAddress').value,
+        email: document.getElementById('gRegEmail').value,
+        phone: document.getElementById('gRegPhone').value,
+        guestId: 'GST-' + Math.floor(100000 + Math.random() * 900000)
+      };
+
+      try {
+        await fetch(`${API_BASE_URL}/api/auth/guest/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentGuest)
+        });
+      } catch (err) {
+        console.warn('Backend unavailable, running with local guest session.');
+      }
+
+      showJoinScreen();
+    }
+
+    // Handle Login
+    async function handleGuestLogin(e) {
+      e.preventDefault();
+      currentGuest = {
+        email: document.getElementById('gLoginEmail').value,
+        role: 'guest'
+      };
+      showJoinScreen();
+    }
+
+    function showJoinScreen() {
+      document.getElementById('guestAuthView').style.display = 'none';
+      document.getElementById('joinEventView').style.display = 'block';
+      document.getElementById('guestLogoutBtn').style.display = 'inline-block';
+    }
+
+    // Handle Join Event
+    function handleJoinEvent(e) {
+      e.preventDefault();
+      document.getElementById('joinEventView').style.display = 'none';
+      document.getElementById('eventExperienceView').style.display = 'block';
+      initRotaryDialer();
+      updateDietaryUI();
+    }
+
+    // --------------------------------------------------------------------------
+    // ROTARY NUMERIC DIALER (Numbers 1-8 + C positioned mathematically on circle)
+    // --------------------------------------------------------------------------
+    function initRotaryDialer() {
+      const wheel = document.getElementById('rotaryWheel');
+      // Clear existing nodes except center
+      wheel.querySelectorAll('.dial-node').forEach(n => n.remove());
+
+      const nodes = ['1', '2', '3', '4', '5', '6', '7', '8', 'C'];
+      const radius = 95; // distance from center (px)
+      const centerOffset = 125 - 19; // wheel 250px / 2 minus half node width 38px/2
+
+      nodes.forEach((val, index) => {
+        // Place nodes clockwise starting from top right
+        const angle = (index * (360 / nodes.length) - 90) * (Math.PI / 180);
+        const x = centerOffset + radius * Math.cos(angle);
+        const y = centerOffset + radius * Math.sin(angle);
+
+        const node = document.createElement('div');
+        node.className = `dial-node ${val == selectedHeadcount ? 'active' : ''}`;
+        node.textContent = val;
+        node.style.left = `${x}px`;
+        node.style.top = `${y}px`;
+
+        node.onclick = () => selectDialerValue(val);
+        wheel.appendChild(node);
+      });
+    }
+
+    function selectDialerValue(val) {
+      if (isRsvpLocked) {
+        alert('Total attendance headcount is fixed after initial confirmation. Dietary choices can still be modified.');
+        return;
+      }
+
+      const customBox = document.getElementById('customHeadcountBox');
+
+      if (val === 'C') {
+        customBox.style.display = 'block';
+        selectedHeadcount = parseInt(document.getElementById('customInputVal').value) || 1;
+      } else {
+        customBox.style.display = 'none';
+        selectedHeadcount = parseInt(val);
+      }
+
+      document.getElementById('dialerSelectedVal').textContent = selectedHeadcount;
+      document.querySelectorAll('.dial-node').forEach(node => {
+        node.classList.toggle('active', node.textContent === String(val));
+      });
+
+      // Reset & calibrate dietary allocations
+      dietaryCounts.veg = selectedHeadcount;
+      dietaryCounts.jain = 0;
+      dietaryCounts.vegan = 0;
+      dietaryCounts.nonveg = 0;
+
+      // Update Stay limit
+      document.getElementById('stayHeadcountVal').max = selectedHeadcount;
+      document.getElementById('stayHeadcountVal').value = selectedHeadcount;
+
+      updateDietaryUI();
+    }
+
+    function applyCustomHeadcount(count) {
+      const num = Math.max(1, parseInt(count) || 1);
+      selectedHeadcount = num;
+      document.getElementById('dialerSelectedVal').textContent = num;
+      selectDialerValue('C');
+    }
+
+    // --------------------------------------------------------------------------
+    // CONSTRAINED DIETARY COUNTERS
+    // --------------------------------------------------------------------------
+    function modifyDiet(category, delta) {
+      const currentAllocated = dietaryCounts.veg + dietaryCounts.jain + dietaryCounts.vegan + dietaryCounts.nonveg;
+      const targetVal = dietaryCounts[category] + delta;
+
+      if (delta > 0 && currentAllocated >= selectedHeadcount) {
+        alert('Total dietary allocations cannot exceed the confirmed attendance count (' + selectedHeadcount + ').');
+        return;
+      }
+
+      if (targetVal < 0) return;
+
+      dietaryCounts[category] = targetVal;
+      updateDietaryUI();
+    }
+
+    function updateDietaryUI() {
+      document.getElementById('dietVegVal').textContent = dietaryCounts.veg;
+      document.getElementById('dietJainVal').textContent = dietaryCounts.jain;
+      document.getElementById('dietVeganVal').textContent = dietaryCounts.vegan;
+      document.getElementById('dietNonVegVal').textContent = dietaryCounts.nonveg;
+
+      const totalAllocated = dietaryCounts.veg + dietaryCounts.jain + dietaryCounts.vegan + dietaryCounts.nonveg;
+      const remaining = selectedHeadcount - totalAllocated;
+      document.getElementById('remainingCountDisplay').textContent = remaining;
+
+      const disablePlus = remaining <= 0;
+      document.getElementById('btnPlusVeg').disabled = disablePlus;
+      document.getElementById('btnPlusJain').disabled = disablePlus;
+      document.getElementById('btnPlusVegan').disabled = disablePlus;
+      document.getElementById('btnPlusNonVeg').disabled = disablePlus;
+    }
+
+    function toggleStay(required) {
+      requiresAccommodation = required;
+      document.getElementById('btnStayYes').className = required ? 'btn btn-rust' : 'btn btn-outline';
+      document.getElementById('btnStayNo').className = !required ? 'btn btn-rust' : 'btn btn-outline';
+      document.getElementById('stayHeadcountBox').style.display = required ? 'block' : 'none';
+    }
+
+    // Submit RSVP
+    async function submitRsvp() {
+      const totalAllocated = dietaryCounts.veg + dietaryCounts.jain + dietaryCounts.vegan + dietaryCounts.nonveg;
+      if (totalAllocated !== selectedHeadcount) {
+        alert(`Please allocate dietary preferences for all ${selectedHeadcount} attendees (currently assigned ${totalAllocated}).`);
+        return;
+      }
+
+      isRsvpLocked = true;
+
+      // Show confirmed summary banner
+      document.getElementById('confirmedSummaryBanner').style.display = 'flex';
+      document.getElementById('badgeHeadcountText').textContent = `${selectedHeadcount} Attending Members`;
+
+      const payload = {
+        headcount: selectedHeadcount,
+        dietary: dietaryCounts,
+        accommodation: requiresAccommodation ? parseInt(document.getElementById('stayHeadcountVal').value) : 0
+      };
+
+      try {
+        await fetch(`${API_BASE_URL}/api/guest/rsvp`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn('Backend unavailable, recorded locally.');
+      }
+
+      alert('🎉 RSVP Confirmed! Your attendance and dietary preferences have been synchronized with the Host and Caterer.');
+    }
+
+    function handleGuestLogout() {
+      location.reload();
+    }
+  </script>
+</body>
+</html>

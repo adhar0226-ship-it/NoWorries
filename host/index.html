@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOWORRIES — Host Portal & Dashboard</title>
+  <meta name="description" content="Host Portal for NOWORRIES Indian Wedding Management Platform">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS — EXACT CONSISTENCY WITH LANDING PAGE
+       ========================================================================== */
+    :root {
+      --bg-cream: #FAF7F2;
+      --bg-card: #FFFFFF;
+      --bg-sage-light: #E5ECE7;
+      --bg-sage-banner: #D5E0D8;
+      --bg-sage-pill: #E2ECE5;
+      
+      --color-charcoal: #1E1B18;
+      --color-text-muted: #5F5953;
+      --color-rust: #BF4F16;
+      --color-rust-hover: #A54211;
+      --color-sage-btn: #94A38E;
+      --color-sage-btn-hover: #83937D;
+      --color-border-warm: #D4CBBD;
+      --color-border-light: #E8E2D8;
+      --color-accent-blue: #2D68C4;
+      --color-success: #2E7D32;
+      --color-danger: #D32F2F;
+      
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      
+      --shadow-subtle: 0 4px 20px rgba(45, 35, 25, 0.04);
+      --shadow-card: 0 10px 30px rgba(35, 25, 15, 0.06);
+      --shadow-nav: 0 8px 24px rgba(30, 25, 20, 0.08);
+      
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+      
+      --nav-height: 72px;
+      --bottom-nav-height: 64px;
+      --max-width: 1200px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--color-charcoal);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      border: none;
+      background: none;
+      transition: all 0.25s ease;
+    }
+
+    input, textarea, select {
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--color-charcoal);
+      background: #FFFFFF;
+      border: 1.5px solid var(--color-border-warm);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      width: 100%;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--color-rust);
+      box-shadow: 0 0 0 3px rgba(191, 79, 22, 0.12);
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-rust {
+      background-color: var(--color-rust);
+      color: #FFFFFF;
+    }
+    .btn-rust:hover {
+      background-color: var(--color-rust-hover);
+      box-shadow: 0 6px 16px rgba(191, 79, 22, 0.25);
+    }
+
+    .btn-sage {
+      background-color: var(--color-sage-btn);
+      color: #FFFFFF;
+    }
+    .btn-sage:hover {
+      background-color: var(--color-sage-btn-hover);
+    }
+
+    .btn-outline {
+      background-color: #FFFFFF;
+      border: 1.5px solid var(--color-border-warm);
+      color: var(--color-charcoal);
+    }
+    .btn-outline:hover {
+      border-color: var(--color-rust);
+      color: var(--color-rust);
+    }
+
+    /* Top Header */
+    .portal-header {
+      height: var(--nav-height);
+      background-color: rgba(250, 247, 242, 0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(212, 203, 189, 0.4);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .portal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-box {
+      width: 36px;
+      height: 36px;
+      background-color: var(--color-accent-blue);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-role {
+      background-color: var(--bg-sage-pill);
+      color: #384236;
+      border: 1px solid var(--color-sage-btn);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Auth Screens */
+    .auth-wrapper {
+      max-width: 580px;
+      margin: 40px auto 60px;
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border-warm);
+      box-shadow: var(--shadow-card);
+      padding: 36px 32px;
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .auth-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--color-border-light);
+      margin-bottom: 24px;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 12px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      border-bottom: 2px solid transparent;
+      text-align: center;
+    }
+
+    .auth-tab.active {
+      color: var(--color-rust);
+      border-bottom-color: var(--color-rust);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--color-charcoal);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-note {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+
+    /* Dashboard Layout */
+    .dashboard-view {
+      display: none;
+      padding: 32px 0 90px;
+    }
+
+    .dash-header-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+      background: #FFFFFF;
+      padding: 20px 24px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border-light);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .event-id-display {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-cream);
+      border: 1px solid var(--color-border-warm);
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-family: monospace;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--color-rust);
+    }
+
+    .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .metric-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      padding: 22px;
+      border: 1px solid var(--color-border-light);
+      box-shadow: var(--shadow-subtle);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-val {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--color-charcoal);
+      margin: 4px 0 2px;
+    }
+
+    .metric-label {
+      font-size: 0.82rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .panel-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border-light);
+      box-shadow: var(--shadow-subtle);
+      padding: 24px;
+      margin-bottom: 26px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--color-border-light);
+    }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    /* Diet Bar Breakdown */
+    .diet-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--color-border-light);
+    }
+
+    .diet-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .diet-count {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--color-rust);
+    }
+
+    /* Caterer Live Status Item */
+    .prep-status-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 10px;
+      border: 1px solid var(--color-border-light);
+      background: #FAFAFA;
+    }
+
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .indicator-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-not-ready {
+      background-color: var(--color-danger);
+      animation: blink 1.2s infinite;
+    }
+
+    .dot-ready {
+      background-color: var(--color-success);
+    }
+
+    .item-ready-pulse {
+      background: rgba(46, 125, 50, 0.08);
+      border-color: rgba(46, 125, 50, 0.3);
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+
+    /* Bottom Mobile Navigation (Max 5 tabs, standard UX) */
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: var(--bottom-nav-height);
+      background-color: #FFFFFF;
+      border-top: 1px solid var(--color-border-light);
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+      display: none;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 1000;
+    }
+
+    .bottom-tab-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      flex: 1;
+      height: 100%;
+    }
+
+    .bottom-tab-btn.active {
+      color: var(--color-rust);
+    }
+
+    .bottom-tab-center {
+      position: relative;
+      top: -12px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--color-rust);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(191, 79, 22, 0.35);
+    }
+
+    /* Notifications & Alert Bar */
+    .portal-banner {
+      background: var(--bg-sage-pill);
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.88rem;
+    }
+
+    @media (max-width: 900px) {
+      .dash-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      .mobile-bottom-nav {
+        display: flex;
+      }
+      body {
+        padding-bottom: var(--bottom-nav-height);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .dash-grid {
+        grid-template-columns: 1fr;
+      }
+      .auth-wrapper {
+        padding: 24px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="portal-header">
+    <div class="container portal-nav">
+      <div class="brand-group">
+        <a href="../index.html" class="brand-group" style="text-decoration:none;">
+          <div class="logo-box">NW</div>
+          <span class="brand-title">NOWORRIES</span>
+        </a>
+        <span class="badge-role">Host Portal</span>
+      </div>
+      <div>
+        <button id="logoutBtn" class="btn btn-outline" style="display:none; padding:6px 14px; font-size:0.85rem;">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="flex:1;">
+    
+    <!-- AUTH SECTION: Login & Registration -->
+    <section id="authSection" class="auth-wrapper">
+      <div class="auth-header">
+        <h1 class="auth-title" id="authHeading">Host Login</h1>
+        <p class="form-note">Manage wedding attendance, food preferences &amp; caterer updates</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Register as Host</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" onsubmit="handleHostLogin(event)">
+        <div class="form-group">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" required placeholder="name@domain.com">
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-rust" style="width:100%; margin-top:10px;">Sign In to Dashboard</button>
+        <div style="text-align:center; margin-top:14px;">
+          <a href="#" style="font-size:0.82rem; color:var(--color-rust);" onclick="alert('Password reset link will be dispatched to your registered host email.')">Forgot password?</a>
+        </div>
+      </form>
+
+      <!-- Registration Form (Complete requirements: Host, Bride & Groom, Venue, PIN, Timeline) -->
+      <form id="registerForm" style="display:none;" onsubmit="handleHostRegister(event)">
+        <div class="form-group">
+          <label for="regHostName">Host Full Name</label>
+          <input type="text" id="regHostName" required placeholder="e.g. Ramesh &amp; Sunita Verma">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="regBrideName">Bride's Name</label>
+            <input type="text" id="regBrideName" required placeholder="Bride's Name">
+          </div>
+          <div class="form-group">
+            <label for="regGroomName">Groom's Name</label>
+            <input type="text" id="regGroomName" required placeholder="Groom's Name">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="regVenue">Venue &amp; City</label>
+            <input type="text" id="regVenue" required placeholder="e.g. The Oberoi Udaivilas, Udaipur">
+          </div>
+          <div class="form-group">
+            <label for="regWeddingDate">Wedding Date</label>
+            <input type="date" id="regWeddingDate" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="regEmail">Email Address</label>
+            <input type="email" id="regEmail" required placeholder="host@wedding.com">
+          </div>
+          <div class="form-group">
+            <label for="regPhone">Phone Number</label>
+            <input type="tel" id="regPhone" required placeholder="+91 98765 43210">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="regPin">4-Digit Guest Access PIN</label>
+            <input type="password" id="regPin" maxlength="4" pattern="[0-9]{4}" required placeholder="e.g. 5432">
+            <div class="form-note">Used by guests along with Event ID</div>
+          </div>
+          <div class="form-group">
+            <label for="regDressCode">Dress Code</label>
+            <input type="text" id="regDressCode" placeholder="e.g. Traditional Royal Indian">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="regMessage">Personalized Welcome Message</label>
+          <textarea id="regMessage" rows="2" placeholder="Warm message displayed to guests when joining..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="regPassword">Password</label>
+            <input type="password" id="regPassword" minlength="6" required placeholder="••••••••">
+          </div>
+          <div class="form-group">
+            <label for="regConfirmPassword">Confirm Password</label>
+            <input type="password" id="regConfirmPassword" minlength="6" required placeholder="••••••••">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-rust" style="width:100%; margin-top:12px;">Create Event &amp; Generate Event ID</button>
+      </form>
+    </section>
+
+    <!-- HOST DASHBOARD SECTION -->
+    <section id="dashboardSection" class="dashboard-view">
+      
+      <!-- Top Event Info Banner -->
+      <div class="dash-header-bar">
+        <div>
+          <h2 style="font-family:var(--font-display); font-size:1.6rem; margin-bottom:4px;" id="dashCoupleNames">Aarav &amp; Kavya's Wedding</h2>
+          <div style="font-size:0.9rem; color:var(--color-text-muted);" id="dashVenueDate">The Oberoi Udaivilas, Udaipur • 15 Dec 2026</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div>
+            <div style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:700;">Event ID</div>
+            <div class="event-id-display" id="dashEventId">NW42-7890-K912</div>
+          </div>
+          <div>
+            <div style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:700;">Guest PIN</div>
+            <div class="event-id-display" id="dashPin">5432</div>
+          </div>
+          <button class="btn btn-outline" onclick="regenerateEventId()" title="Regenerate Event ID" style="padding:8px 12px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Key Metrics Row -->
+      <div class="dash-grid">
+        <div class="metric-card">
+          <span class="metric-label">Confirmed Guests</span>
+          <span class="metric-val" id="metricTotalGuests">348</span>
+          <span style="font-size:0.82rem; color:var(--color-success);">82 families confirmed</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Pure Vegetarian</span>
+          <span class="metric-val" id="metricVeg">214</span>
+          <span style="font-size:0.82rem; color:var(--color-text-muted);">61.5% of attending count</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Jain / Satvik</span>
+          <span class="metric-val" id="metricJain">72</span>
+          <span style="font-size:0.82rem; color:var(--color-rust);">Strict root/onion-garlic free</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Rooms / Lodging</span>
+          <span class="metric-val" id="metricRooms">142</span>
+          <span style="font-size:0.82rem; color:var(--color-text-muted);">Headcount needing stay</span>
+        </div>
+      </div>
+
+      <!-- Main Columns: Dietary Breakdown & Caterer Status -->
+      <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:24px;">
+        
+        <!-- Dietary & Food Allocation Panel -->
+        <div class="panel-card">
+          <div class="panel-head">
+            <h3 class="panel-title">Dietary &amp; Food Allocations</h3>
+            <span class="badge-role" style="background:#FFF;">Live Sync</span>
+          </div>
+
+          <div class="diet-row">
+            <div>
+              <div class="diet-name">Vegetarian (Lacto-Ovo)</div>
+              <div class="form-note">Includes dairy &amp; farm ingredients</div>
+            </div>
+            <div class="diet-count" id="countVeg">214</div>
+          </div>
+
+          <div class="diet-row">
+            <div>
+              <div class="diet-name">Jain / Satvik (No Root Veg, No Garlic/Onion)</div>
+              <div class="form-note">Dedicated preparation line</div>
+            </div>
+            <div class="diet-count" id="countJain">72</div>
+          </div>
+
+          <div class="diet-row">
+            <div>
+              <div class="diet-name">Vegan (Zero Animal Products)</div>
+              <div class="form-note">Plant-based curries &amp; desserts</div>
+            </div>
+            <div class="diet-count" id="countVegan">38</div>
+          </div>
+
+          <div class="diet-row">
+            <div>
+              <div class="diet-name">Non-Vegetarian (Poultry &amp; Mutton)</div>
+              <div class="form-note">Strict separate cookware enforcement</div>
+            </div>
+            <div class="diet-count" id="countNonVeg">24</div>
+          </div>
+
+          <div class="diet-row" style="border-bottom:none;">
+            <div>
+              <div class="diet-name">Allergies &amp; Intolerances</div>
+              <div class="form-note">Nut allergies (12), Gluten-free (9), Dairy-free (4)</div>
+            </div>
+            <div class="diet-count" style="color:var(--color-charcoal);">25</div>
+          </div>
+        </div>
+
+        <!-- Caterer Kitchen Live Status Panel -->
+        <div class="panel-card">
+          <div class="panel-head">
+            <h3 class="panel-title">Caterer Live Preparation Status</h3>
+            <span class="badge-role" style="background:#FFF;">Direct Kitchen Feed</span>
+          </div>
+
+          <div class="prep-status-item item-ready-pulse" id="prepWelcome">
+            <div>
+              <div style="font-weight:700;">Welcome Drinks &amp; Refreshments</div>
+              <div class="form-note">Thandai, Kesar Badam Milk &amp; Chaas</div>
+            </div>
+            <div class="status-indicator" style="color:var(--color-success);">
+              <span class="indicator-dot dot-ready"></span> READY
+            </div>
+          </div>
+
+          <div class="prep-status-item item-ready-pulse" id="prepStarters">
+            <div>
+              <div style="font-weight:700;">Starters &amp; Live Tandoor</div>
+              <div class="form-note">Paneer Tikka, Dahi Kebab &amp; Chaat Counters</div>
+            </div>
+            <div class="status-indicator" style="color:var(--color-success);">
+              <span class="indicator-dot dot-ready"></span> READY
+            </div>
+          </div>
+
+          <div class="prep-status-item" id="prepMain">
+            <div>
+              <div style="font-weight:700;">Main Course Buffets</div>
+              <div class="form-note">Dal Makhani, Shahi Paneer, Biryani &amp; Breads</div>
+            </div>
+            <div class="status-indicator" style="color:var(--color-danger);">
+              <span class="indicator-dot dot-not-ready"></span> PREPARING
+            </div>
+          </div>
+
+          <div class="prep-status-item" id="prepDesserts">
+            <div>
+              <div style="font-weight:700;">Dessert &amp; Traditional Sweets</div>
+              <div class="form-note">Gulab Jamun, Moong Dal Halwa &amp; Kulfi</div>
+            </div>
+            <div class="status-indicator" style="color:var(--color-danger);">
+              <span class="indicator-dot dot-not-ready"></span> PREPARING
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Mobile Bottom Navigation (Instagram/YouTube inspired) -->
+  <nav class="mobile-bottom-nav">
+    <button class="bottom-tab-btn active" onclick="switchMobileTab('overview')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span>Overview</span>
+    </button>
+    <button class="bottom-tab-btn" onclick="switchMobileTab('dietary')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>Dietary</span>
+    </button>
+    <button class="bottom-tab-center" onclick="alert('Event Settings: edit timeline, access PIN and dietary options.')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+    <button class="bottom-tab-btn" onclick="switchMobileTab('caterer')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/></svg>
+      <span>Caterer</span>
+    </button>
+    <button class="bottom-tab-btn" onclick="switchMobileTab('profile')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Profile</span>
+    </button>
+  </nav>
+
+  <!-- ==========================================================================
+       HOST CONTROLLER JAVASCRIPT
+       ========================================================================== -->
+  <script>
+    /**
+     * CENTRALIZED API BASE CONFIGURATION
+     * Replace with your deployed Render backend URL when ready:
+     * const API_BASE_URL = "https://your-backend.onrender.com";
+     */
+    const API_BASE_URL = window.API_BASE_URL || "https://your-backend.onrender.com";
+
+    // Application State
+    let currentHostSession = null;
+
+    // Helper: Generate 12-char Event ID (XXXX-XXXX-XXXX)
+    function generateEventId() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      const segment = () => Array.from({length: 4}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+      return `${segment()}-${segment()}-${segment()}`;
+    }
+
+    // Switch between Login and Register tabs
+    function switchAuthTab(mode) {
+      const isLogin = mode === 'login';
+      document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+      document.getElementById('registerForm').style.display = isLogin ? 'none' : 'block';
+      document.getElementById('tabLogin').classList.toggle('active', isLogin);
+      document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+      document.getElementById('authHeading').textContent = isLogin ? 'Host Login' : 'Host Registration';
+    }
+
+    // Handle Registration
+    async function handleHostRegister(e) {
+      e.preventDefault();
+
+      const pwd = document.getElementById('regPassword').value;
+      const confirmPwd = document.getElementById('regConfirmPassword').value;
+
+      if (pwd !== confirmPwd) {
+        alert('Passwords do not match. Please verify.');
+        return;
+      }
+
+      const hostPayload = {
+        role: 'host',
+        hostName: document.getElementById('regHostName').value,
+        brideName: document.getElementById('regBrideName').value,
+        groomName: document.getElementById('regGroomName').value,
+        venue: document.getElementById('regVenue').value,
+        weddingDate: document.getElementById('regWeddingDate').value,
+        email: document.getElementById('regEmail').value,
+        phone: document.getElementById('regPhone').value,
+        pin: document.getElementById('regPin').value,
+        dressCode: document.getElementById('regDressCode').value,
+        message: document.getElementById('regMessage').value,
+        password: pwd,
+        eventId: generateEventId(),
+        hostId: 'HST-' + Math.floor(100000 + Math.random() * 900000)
+      };
+
+      // Try calling the Render backend API if live; fallback to local state smoothly
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/host/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(hostPayload)
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          currentHostSession = data;
+        } else {
+          // If backend is not deployed yet, proceed with validated local state
+          currentHostSession = hostPayload;
+        }
+      } catch (err) {
+        // Network / placeholder fallback
+        console.warn('Backend endpoint unreachable at', API_BASE_URL, '- using client session.');
+        currentHostSession = hostPayload;
+      }
+
+      activateDashboard(currentHostSession);
+    }
+
+    // Handle Login
+    async function handleHostLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/host/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, role: 'host' })
+        });
+
+        if (response.ok) {
+          currentHostSession = await response.json();
+        } else {
+          // Demo/test fallback session
+          currentHostSession = {
+            brideName: 'Aarav',
+            groomName: 'Kavya',
+            venue: 'The Oberoi Udaivilas, Udaipur',
+            weddingDate: '2026-12-15',
+            eventId: 'NW42-7890-K912',
+            pin: '5432'
+          };
+        }
+      } catch (err) {
+        currentHostSession = {
+          brideName: 'Aarav',
+          groomName: 'Kavya',
+          venue: 'The Oberoi Udaivilas, Udaipur',
+          weddingDate: '2026-12-15',
+          eventId: 'NW42-7890-K912',
+          pin: '5432'
+        };
+      }
+
+      activateDashboard(currentHostSession);
+    }
+
+    // Activate Dashboard View
+    function activateDashboard(data) {
+      document.getElementById('authSection').style.display = 'none';
+      document.getElementById('dashboardSection').style.display = 'block';
+      document.getElementById('logoutBtn').style.display = 'inline-block';
+
+      if (data.brideName && data.groomName) {
+        document.getElementById('dashCoupleNames').textContent = `${data.brideName} & ${data.groomName}'s Wedding`;
+      }
+      if (data.venue && data.weddingDate) {
+        document.getElementById('dashVenueDate').textContent = `${data.venue} • ${data.weddingDate}`;
+      }
+      if (data.eventId) {
+        document.getElementById('dashEventId').textContent = data.eventId;
+      }
+      if (data.pin) {
+        document.getElementById('dashPin').textContent = data.pin;
+      }
+    }
+
+    // Regenerate Event ID
+    function regenerateEventId() {
+      if (confirm('Regenerate the 12-character Event ID? Guests will need the new ID to access the wedding.')) {
+        const newId = generateEventId();
+        document.getElementById('dashEventId').textContent = newId;
+        if (currentHostSession) currentHostSession.eventId = newId;
+      }
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      currentHostSession = null;
+      document.getElementById('dashboardSection').style.display = 'none';
+      document.getElementById('authSection').style.display = 'block';
+      this.style.display = 'none';
+      switchAuthTab('login');
+    });
+
+    // Mobile Navigation Controller
+    function switchMobileTab(tab) {
+      document.querySelectorAll('.bottom-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('.bottom-tab-btn')).find(b => b.textContent.toLowerCase().includes(tab));
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+  </script>
+</body>
+</html>

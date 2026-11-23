@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOWORRIES — Caterer Kitchen Portal & Live Prep Status</title>
+  <meta name="description" content="Caterer Portal for NOWORRIES Indian Wedding Management Platform">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-cream: #FAF7F2;
+      --bg-card: #FFFFFF;
+      --bg-sage-light: #E5ECE7;
+      --bg-sage-banner: #D5E0D8;
+      --bg-sage-pill: #E2ECE5;
+      
+      --color-charcoal: #1E1B18;
+      --color-text-muted: #5F5953;
+      --color-rust: #BF4F16;
+      --color-rust-hover: #A54211;
+      --color-sage-btn: #94A38E;
+      --color-sage-btn-hover: #83937D;
+      --color-border-warm: #D4CBBD;
+      --color-border-light: #E8E2D8;
+      --color-accent-blue: #2D68C4;
+      --color-danger: #D32F2F;
+      --color-success: #2E7D32;
+      
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      
+      --shadow-subtle: 0 4px 20px rgba(45, 35, 25, 0.04);
+      --shadow-card: 0 10px 30px rgba(35, 25, 15, 0.06);
+      
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+      
+      --nav-height: 72px;
+      --max-width: 1080px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--color-charcoal);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      border: none;
+      background: none;
+      transition: all 0.25s ease;
+    }
+
+    input {
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--color-charcoal);
+      background: #FFFFFF;
+      border: 1.5px solid var(--color-border-warm);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    input:focus {
+      border-color: var(--color-rust);
+      box-shadow: 0 0 0 3px rgba(191, 79, 22, 0.12);
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-rust {
+      background-color: var(--color-rust);
+      color: #FFFFFF;
+    }
+    .btn-rust:hover {
+      background-color: var(--color-rust-hover);
+      box-shadow: 0 6px 16px rgba(191, 79, 22, 0.25);
+    }
+
+    .btn-sage {
+      background-color: var(--color-sage-btn);
+      color: #FFFFFF;
+    }
+    .btn-sage:hover {
+      background-color: var(--color-sage-btn-hover);
+    }
+
+    .btn-outline {
+      background-color: #FFFFFF;
+      border: 1.5px solid var(--color-border-warm);
+      color: var(--color-charcoal);
+    }
+    .btn-outline:hover {
+      border-color: var(--color-rust);
+      color: var(--color-rust);
+    }
+
+    /* Top Navigation */
+    .portal-header {
+      height: var(--nav-height);
+      background-color: rgba(250, 247, 242, 0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(212, 203, 189, 0.4);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .portal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-box {
+      width: 36px;
+      height: 36px;
+      background-color: var(--color-accent-blue);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-role {
+      background-color: var(--bg-sage-pill);
+      color: #384236;
+      border: 1px solid var(--color-sage-btn);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Cards */
+    .card-panel {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border-warm);
+      box-shadow: var(--shadow-card);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .card-panel-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--color-charcoal);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Food Headcount Metrics Bar */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .caterer-metric {
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border-light);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-subtle);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .caterer-metric-val {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-charcoal);
+      margin: 4px 0 2px;
+    }
+
+    .caterer-metric-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* Preparation Status Item & Animations */
+    .prep-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--color-border-light);
+      border-radius: var(--radius-md);
+      padding: 22px 24px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      transition: all 0.3s ease;
+    }
+
+    /* Not Ready: Blinking Red Indicator */
+    .prep-card.not-ready {
+      border-left: 6px solid var(--color-danger);
+    }
+
+    /* Ready: Continuous Subtle Animated Light-Green Treatment */
+    .prep-card.ready {
+      border-left: 6px solid var(--color-success);
+      background: linear-gradient(90deg, rgba(46, 125, 50, 0.07) 0%, rgba(46, 125, 50, 0.02) 100%);
+      animation: readyGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes readyGlow {
+      0% { box-shadow: 0 4px 14px rgba(46, 125, 50, 0.08); }
+      100% { box-shadow: 0 6px 22px rgba(46, 125, 50, 0.18); }
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.04em;
+    }
+
+    .dot-blinking-red {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--color-danger);
+      animation: redBlink 1.1s infinite;
+    }
+
+    @keyframes redBlink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.25; transform: scale(0.85); }
+    }
+
+    .dot-solid-green {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--color-success);
+    }
+
+    .prep-toggle-btn {
+      padding: 8px 18px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 800px) {
+      .metrics-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .prep-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="portal-header">
+    <div class="container portal-nav">
+      <div class="brand-group">
+        <a href="../index.html" class="brand-group">
+          <div class="logo-box">NW</div>
+          <span class="brand-title">NOWORRIES</span>
+        </a>
+        <span class="badge-role">Caterer Portal</span>
+      </div>
+      <div>
+        <button id="catererLogoutBtn" class="btn btn-outline" style="display:none; padding:6px 14px; font-size:0.85rem;" onclick="handleCatererLogout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="flex:1; padding-top:32px; padding-bottom:60px;">
+
+    <!-- STAGE 1: CATERER AUTHENTICATION -->
+    <div id="catererAuthView" class="card-panel" style="max-width:540px; margin:20px auto;">
+      <div style="text-align:center; margin-bottom:24px;">
+        <h1 class="card-panel-title" id="authTitle">Caterer Portal</h1>
+        <p style="color:var(--color-text-muted); font-size:0.92rem;">Authorized kitchen access for live preparation and headcounts</p>
+      </div>
+
+      <div style="display:flex; border-bottom:1px solid var(--color-border-light); margin-bottom:24px;">
+        <button id="tabCatLogin" class="btn" style="flex:1; border-bottom:2px solid var(--color-rust); color:var(--color-rust);" onclick="toggleCatererAuth('login')">Sign In</button>
+        <button id="tabCatReg" class="btn" style="flex:1; border-bottom:2px solid transparent; color:var(--color-text-muted);" onclick="toggleCatererAuth('register')">Register Team</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="formCatLogin" onsubmit="handleCatererLogin(event)">
+        <div class="form-group">
+          <label for="catLoginEmail">Email Address</label>
+          <input type="email" id="catLoginEmail" required placeholder="chef@catering.com">
+        </div>
+        <div class="form-group">
+          <label for="catLoginPwd">Password</label>
+          <input type="password" id="catLoginPwd" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-rust" style="width:100%; margin-top:8px;">Sign In to Kitchen Dashboard</button>
+      </form>
+
+      <!-- Registration Form -->
+      <form id="formCatReg" style="display:none;" onsubmit="handleCatererRegister(event)">
+        <div class="form-group">
+          <label for="catRegName">Catering Head / Company Name</label>
+          <input type="text" id="catRegName" required placeholder="e.g. Royal Feasts Catering">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="catRegEmail">Email Address</label>
+            <input type="email" id="catRegEmail" required placeholder="head@royalfeasts.com">
+          </div>
+          <div class="form-group">
+            <label for="catRegPhone">Phone Number</label>
+            <input type="tel" id="catRegPhone" required placeholder="+91 98765 43210">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="catRegPwd">Password</label>
+            <input type="password" id="catRegPwd" minlength="6" required placeholder="••••••••">
+          </div>
+          <div class="form-group">
+            <label for="catRegConfirmPwd">Confirm Password</label>
+            <input type="password" id="catRegConfirmPwd" minlength="6" required placeholder="••••••••">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-rust" style="width:100%; margin-top:10px;">Register Caterer Account</button>
+      </form>
+    </div>
+
+    <!-- STAGE 2: EVENT ACCESS -->
+    <div id="joinEventView" class="card-panel" style="max-width:540px; margin:20px auto; display:none;">
+      <h2 class="card-panel-title">Link to Wedding Kitchen</h2>
+      <p style="color:var(--color-text-muted); font-size:0.92rem; margin-bottom:20px;">
+        Enter the Event ID and 4-digit PIN provided by the wedding host.
+      </p>
+
+      <form onsubmit="handleCatererJoin(event)">
+        <div class="form-group">
+          <label for="catEventId">12-Character Event ID</label>
+          <input type="text" id="catEventId" required maxlength="14" placeholder="XXXX-XXXX-XXXX" style="font-family:monospace; text-transform:uppercase; font-size:1.1rem;" value="NW42-7890-K912">
+        </div>
+        <div class="form-group">
+          <label for="catPin">4-Digit Access PIN</label>
+          <input type="password" id="catPin" required maxlength="4" pattern="[0-9]{4}" placeholder="••••" style="font-family:monospace; font-size:1.1rem; letter-spacing:4px;" value="5432">
+        </div>
+        <button type="submit" class="btn btn-rust" style="width:100%;">Open Kitchen Command Board</button>
+      </form>
+    </div>
+
+    <!-- STAGE 3: CATERER DASHBOARD -->
+    <div id="catererDashboardView" style="display:none;">
+
+      <!-- Event Header Banner -->
+      <div class="card-panel" style="padding:20px 24px; margin-bottom:20px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px;">
+        <div>
+          <h1 style="font-family:var(--font-display); font-size:1.6rem; margin-bottom:2px;">Aarav &amp; Kavya's Wedding Feast</h1>
+          <div style="font-size:0.88rem; color:var(--color-text-muted);">The Oberoi Udaivilas, Udaipur • Event: <strong style="font-family:monospace; color:var(--color-rust);">NW42-7890-K912</strong></div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="badge-role" style="background:#FFF;">Live Sync Active</span>
+          <span style="font-size:0.82rem; color:var(--color-text-muted);">Host dashboard reflects status changes instantly</span>
+        </div>
+      </div>
+
+      <!-- Food-Related Guest Counts (No accommodation or private info) -->
+      <div class="metrics-row">
+        <div class="caterer-metric">
+          <span class="caterer-metric-label">Total Attending Plates</span>
+          <span class="caterer-metric-val">348</span>
+          <span style="font-size:0.8rem; color:var(--color-success);">Confirmed RSVPs</span>
+        </div>
+        <div class="caterer-metric">
+          <span class="caterer-metric-label">Pure Vegetarian</span>
+          <span class="caterer-metric-val">214</span>
+          <span style="font-size:0.8rem; color:var(--color-text-muted);">Lacto-Ovo line</span>
+        </div>
+        <div class="caterer-metric">
+          <span class="caterer-metric-label">Jain / Satvik</span>
+          <span class="caterer-metric-val" style="color:var(--color-rust);">72</span>
+          <span style="font-size:0.8rem; color:var(--color-rust);">Strict root/garlic free</span>
+        </div>
+        <div class="caterer-metric">
+          <span class="caterer-metric-label">Vegan &amp; Non-Veg</span>
+          <span class="caterer-metric-val">62</span>
+          <span style="font-size:0.8rem; color:var(--color-text-muted);">38 Vegan • 24 Non-Veg</span>
+        </div>
+      </div>
+
+      <!-- Preparation Status Control Board -->
+      <div class="card-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <div>
+            <h2 class="card-panel-title" style="font-size:1.3rem;">Kitchen Preparation Status</h2>
+            <p style="font-size:0.85rem; color:var(--color-text-muted);">Toggle readiness to update the host's monitor in real time.</p>
+          </div>
+        </div>
+
+        <!-- 1. Welcome Refreshments -->
+        <div class="prep-card ready" id="catItem-welcome">
+          <div>
+            <div style="font-weight:700; font-size:1.1rem; margin-bottom:4px;">1. Welcome &amp; Pre-Meal Refreshments</div>
+            <div style="font-size:0.86rem; color:var(--color-text-muted);">Thandai, Kesar Badam Milk, Mint Chaas, Mocktail Bar (348 serves)</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div class="status-badge" style="color:var(--color-success);" id="badge-welcome">
+              <span class="dot-solid-green"></span> READY
+            </div>
+            <button class="btn btn-outline prep-toggle-btn" onclick="togglePrepStatus('welcome')">Mark as Not Ready</button>
+          </div>
+        </div>
+
+        <!-- 2. Starters & Appetizers -->
+        <div class="prep-card ready" id="catItem-starters">
+          <div>
+            <div style="font-weight:700; font-size:1.1rem; margin-bottom:4px;">2. Starters &amp; Live Chaat Counters</div>
+            <div style="font-size:0.86rem; color:var(--color-text-muted);">Paneer Tikka, Dahi Kebabs, Golgappe, Sev Puri (348 serves)</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div class="status-badge" style="color:var(--color-success);" id="badge-starters">
+              <span class="dot-solid-green"></span> READY
+            </div>
+            <button class="btn btn-outline prep-toggle-btn" onclick="togglePrepStatus('starters')">Mark as Not Ready</button>
+          </div>
+        </div>
+
+        <!-- 3. Main Course -->
+        <div class="prep-card not-ready" id="catItem-main">
+          <div>
+            <div style="font-weight:700; font-size:1.1rem; margin-bottom:4px;">3. Main Course Buffets</div>
+            <div style="font-size:0.86rem; color:var(--color-text-muted);">Dal Makhani, Shahi Paneer, Satvik Kadhai, Biryani, Roti/Naan Basket (348 serves)</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div class="status-badge" style="color:var(--color-danger);" id="badge-main">
+              <span class="dot-blinking-red"></span> NOT READY
+            </div>
+            <button class="btn btn-sage prep-toggle-btn" onclick="togglePrepStatus('main')">Mark as Ready</button>
+          </div>
+        </div>
+
+        <!-- 4. Desserts -->
+        <div class="prep-card not-ready" id="catItem-desserts">
+          <div>
+            <div style="font-weight:700; font-size:1.1rem; margin-bottom:4px;">4. Traditional &amp; Fruit-Based Desserts</div>
+            <div style="font-size:0.86rem; color:var(--color-text-muted);">Hot Gulab Jamun, Moong Dal Halwa, Rabri Kulfi, Eggless Pastries (348 serves)</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div class="status-badge" style="color:var(--color-danger);" id="badge-desserts">
+              <span class="dot-blinking-red"></span> NOT READY
+            </div>
+            <button class="btn btn-sage prep-toggle-btn" onclick="togglePrepStatus('desserts')">Mark as Ready</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    const API_BASE_URL = window.API_BASE_URL || "https://your-backend.onrender.com";
+
+    const prepState = {
+      welcome: true,
+      starters: true,
+      main: false,
+      desserts: false
+    };
+
+    function toggleCatererAuth(mode) {
+      const isLogin = mode === 'login';
+      document.getElementById('formCatLogin').style.display = isLogin ? 'block' : 'none';
+      document.getElementById('formCatReg').style.display = isLogin ? 'none' : 'block';
+      document.getElementById('tabCatLogin').style.color = isLogin ? 'var(--color-rust)' : 'var(--color-text-muted)';
+      document.getElementById('tabCatLogin').style.borderBottomColor = isLogin ? 'var(--color-rust)' : 'transparent';
+      document.getElementById('tabCatReg').style.color = !isLogin ? 'var(--color-rust)' : 'var(--color-text-muted)';
+      document.getElementById('tabCatReg').style.borderBottomColor = !isLogin ? 'var(--color-rust)' : 'transparent';
+    }
+
+    async function handleCatererRegister(e) {
+      e.preventDefault();
+      showJoinScreen();
+    }
+
+    async function handleCatererLogin(e) {
+      e.preventDefault();
+      showJoinScreen();
+    }
+
+    function showJoinScreen() {
+      document.getElementById('catererAuthView').style.display = 'none';
+      document.getElementById('joinEventView').style.display = 'block';
+      document.getElementById('catererLogoutBtn').style.display = 'inline-block';
+    }
+
+    function handleCatererJoin(e) {
+      e.preventDefault();
+      document.getElementById('joinEventView').style.display = 'none';
+      document.getElementById('catererDashboardView').style.display = 'block';
+    }
+
+    // Toggle Preparation Status with instantaneous UI feedback & backend sync
+    async function togglePrepStatus(category) {
+      const current = prepState[category];
+      const targetState = !current;
+      prepState[category] = targetState;
+
+      const card = document.getElementById(`catItem-${category}`);
+      const badge = document.getElementById(`badge-${category}`);
+      const btn = card.querySelector('.prep-toggle-btn');
+
+      if (targetState) {
+        card.className = 'prep-card ready';
+        badge.style.color = 'var(--color-success)';
+        badge.innerHTML = '<span class="dot-solid-green"></span> READY';
+        btn.className = 'btn btn-outline prep-toggle-btn';
+        btn.textContent = 'Mark as Not Ready';
+      } else {
+        card.className = 'prep-card not-ready';
+        badge.style.color = 'var(--color-danger)';
+        badge.innerHTML = '<span class="dot-blinking-red"></span> NOT READY';
+        btn.className = 'btn btn-sage prep-toggle-btn';
+        btn.textContent = 'Mark as Ready';
+      }
+
+      // Sync with backend API
+      try {
+        await fetch(`${API_BASE_URL}/api/caterer/prep-status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category, isReady: targetState, eventId: 'NW42-7890-K912' })
+        });
+      } catch (err) {
+        console.warn('Backend offline, status toggled locally.');
+      }
+    }
+
+    function handleCatererLogout() {
+      location.reload();
+    }
+  </script>
+</body>
+</html>
