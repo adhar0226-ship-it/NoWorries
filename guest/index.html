@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#2f4a3e">
+<title>NOWORRIES · Guest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5efe4;--paper2:#ece3d2;--card:#fbf8f1;--ink:#241f1a;--muted:#675e52;--line:#d6c9b2;
+  --brick:#8a3a2f;--brick-d:#702d24;--brass:#a9823f;--pine:#2f4a3e;--pine-d:#223830;--ok:#2f6b4a;--err:#a3281f;
+  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;--sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{font:16px/1.5 var(--sans);color:var(--ink);background:var(--paper);min-height:100dvh;overflow-x:hidden}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.1}
+h1{font-size:clamp(2.2rem,7vw,3.4rem)}h2{font-size:clamp(1.7rem,5vw,2.3rem)}h3{font-size:1.35rem}
+p{max-width:62ch}
+a{color:var(--brick)}
+:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.muted{color:var(--muted)}.small{font-size:.9rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:48px;padding:0 1.4rem;border:1.5px solid var(--brick);background:var(--brick);color:#fff8ef;border-radius:6px;font-weight:600;transition:background .2s,transform .1s}
+.btn:hover{background:var(--brick-d)}.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--brick)}.btn.ghost:hover{background:rgba(138,58,47,.08)}
+.btn.light{background:var(--paper);border-color:var(--paper);color:var(--pine-d)}.btn.light:hover{background:#fff}
+.btn.lghost{background:transparent;border-color:rgba(245,239,228,.5);color:var(--paper)}
+.btn:disabled,.btn[aria-disabled=true]{opacity:.5;pointer-events:none}
+.link{background:none;border:0;color:var(--brick);text-decoration:underline;padding:.4rem 0;min-height:44px}
+.row{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
+.stack>*+*{margin-top:1rem}
+/* forms */
+.field{display:grid;gap:.35rem}
+.field label{font-weight:600;font-size:.95rem}
+.field input,.field textarea{min-height:50px;padding:.7rem .9rem;border:1.5px solid var(--line);background:#fffdf8;border-radius:6px;width:100%}
+.field textarea{min-height:90px;resize:vertical}
+.field input:focus,.field textarea:focus{border-color:var(--pine);outline:none;box-shadow:0 0 0 3px rgba(47,74,62,.18)}
+.field .err{color:var(--err);font-size:.9rem;min-height:1.1em}
+.field input[aria-invalid=true]{border-color:var(--err)}
+.alert{padding:.8rem 1rem;border-left:4px solid var(--brass);background:var(--paper2);border-radius:0 6px 6px 0}
+.alert.bad{border-color:var(--err);background:#f6e1dd}.alert.good{border-color:var(--ok);background:#e0eee4}
+/* auth */
+.auth{min-height:100dvh;display:grid;grid-template-columns:1fr}
+.auth-hero{background:var(--pine);color:var(--paper);padding:2.5rem 1.5rem 2rem;display:flex;flex-direction:column;justify-content:flex-end;gap:1rem;min-height:220px}
+.auth-hero .brand{font-family:var(--serif);font-size:1.5rem;letter-spacing:.12em}
+.auth-hero p{color:#d9d2c0}
+.auth-main{padding:1.5rem 1.25rem 3rem;max-width:520px;width:100%;margin:0 auto}
+.tabs{display:flex;border-bottom:1.5px solid var(--line);margin-bottom:1.5rem}
+.tabs button{flex:1;min-height:50px;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-1.5px;font-weight:600;color:var(--muted)}
+.tabs button[aria-selected=true]{color:var(--ink);border-color:var(--brick)}
+@media(min-width:860px){.auth{grid-template-columns:1fr 1fr}.auth-hero{padding:4rem;justify-content:space-between}.auth-main{align-self:center;padding:3rem}}
+/* shell */
+.shell{min-height:100dvh;padding-bottom:84px}
+.page{max-width:900px;margin:0 auto;padding:1.5rem 1.25rem 2rem}
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1.5px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:20}
+.nav a{flex:1;min-height:64px;display:grid;place-items:center;text-decoration:none;color:var(--muted);font-weight:600;border-top:3px solid transparent;margin-top:-1.5px}
+.nav a[aria-current=page]{color:var(--brick);border-color:var(--brick)}
+.topbar{display:none}
+@media(min-width:860px){
+  .shell{padding-bottom:0}
+  .nav{position:sticky;top:0;bottom:auto;border:0;border-bottom:1.5px solid var(--line);padding:0 2rem;justify-content:flex-start;gap:.5rem}
+  .nav a{flex:none;min-height:60px;padding:0 1.2rem;border-top:0;border-bottom:3px solid transparent;margin:0 0 -1.5px}
+  .nav a[aria-current=page]{border-bottom-color:var(--brick)}
+  .nav .spacer{flex:1}
+  .nav a.profile{order:3}
+}
+.hello{padding:1rem 0 1.5rem;border-bottom:1.5px solid var(--line);margin-bottom:1.5rem}
+.hello .gid{font-family:ui-monospace,Menlo,monospace;background:var(--paper2);padding:.15rem .5rem;border-radius:4px;font-size:.95rem;word-break:break-all}
+.ev{display:grid;grid-template-columns:110px 1fr;gap:1rem;width:100%;text-align:left;padding:0;background:var(--card);border:1.5px solid var(--line);border-radius:8px;overflow:hidden;transition:border-color .2s,transform .2s}
+.ev:hover{border-color:var(--brass);transform:translateY(-2px)}
+.ev .ph{background:var(--pine);color:var(--paper);display:grid;place-items:center;font-family:var(--serif);font-size:2rem;min-height:130px;background-size:cover;background-position:center}
+.ev .body{padding:1rem 1rem 1rem 0;display:grid;gap:.25rem;align-content:center}
+.ev h3{font-size:1.5rem}
+.status{font-weight:600;font-size:.95rem}.status.ok{color:var(--ok)}.status.wait{color:var(--brick)}
+.ev.next{grid-template-columns:1fr}.ev.next .ph{min-height:190px}.ev.next .body{padding:1rem 1.25rem 1.25rem}
+@media(min-width:700px){.ev.next{grid-template-columns:260px 1fr}.ev.next .body{padding:1.25rem 1.5rem 1.25rem 0}}
+.list{display:grid;gap:1rem}
+.skel{background:linear-gradient(90deg,var(--paper2),#f3ecdd,var(--paper2));background-size:200% 100%;animation:sh 1.4s infinite;border-radius:8px;min-height:120px}
+@keyframes sh{to{background-position:-200% 0}}
+.center{min-height:100dvh;display:grid;place-items:center;padding:2rem;text-align:center}
+.center .box{max-width:440px;display:grid;gap:1rem;justify-items:center}
+.spin{width:34px;height:34px;border:3px solid var(--line);border-top-color:var(--brick);border-radius:50%;animation:rot .9s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+dl.kv{display:grid;grid-template-columns:max-content 1fr;gap:.6rem 1.25rem}dl.kv dt{color:var(--muted)}dl.kv dd{font-weight:500;word-break:break-word}
+/* story */
+.story{min-height:100dvh;background:var(--pine-d);color:var(--paper);display:flex;flex-direction:column;position:relative}
+.story .top{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem}
+.story .top button{color:var(--paper)}
+.story .stage{flex:1;display:grid;align-content:center;justify-items:center;text-align:center;padding:1.5rem 1.5rem 7rem;gap:1.25rem;animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.story .stage p{color:#e6dfcd;margin-inline:auto}
+.story .kicker{font-family:var(--serif);font-style:italic;font-size:1.3rem;color:#d4b878}
+.story .controls{position:fixed;left:0;right:0;bottom:0;padding:1rem 1rem calc(1rem + env(safe-area-inset-bottom));display:grid;gap:.9rem;background:linear-gradient(transparent,var(--pine-d) 40%)}
+.story .controls .btns{display:flex;gap:.75rem;justify-content:center}
+.segs{display:flex;gap:4px;max-width:420px;margin:0 auto;width:100%}
+.segs i{flex:1;height:3px;background:rgba(245,239,228,.25);border-radius:2px}.segs i.on{background:#d4b878}
+.couple{display:flex;gap:1rem;align-items:flex-start;justify-content:center}
+.couple figure{width:min(40vw,210px)}
+.frame{aspect-ratio:3/4;background:#3a5a4c;border:1.5px solid #d4b878;border-radius:110px 110px 6px 6px;overflow:hidden;display:grid;place-items:center;font-family:var(--serif);font-size:3.5rem;color:#d4b878}
+.frame img{width:100%;height:100%;object-fit:cover}
+.couple figcaption{font-family:var(--serif);font-size:1.7rem;margin-top:.6rem}
+.amp{font-family:var(--serif);font-style:italic;font-size:2.6rem;color:#d4b878;align-self:center;padding-top:2rem}
+.quote{font-family:var(--serif);font-size:clamp(1.5rem,4.5vw,2.2rem);line-height:1.35;font-style:italic;max-width:32ch;white-space:pre-wrap}
+.facts{display:grid;gap:1.1rem;text-align:left;width:min(100%,520px)}
+.facts div{border-bottom:1px solid rgba(212,184,120,.35);padding-bottom:.8rem}
+.facts dt{color:#d4b878;font-family:var(--serif);font-style:italic;font-size:1.15rem}.facts dd{font-size:1.15rem}
+.tl{list-style:none;padding:0;text-align:left;width:min(100%,520px);border-left:1.5px solid #d4b878;margin-left:.5rem}
+.tl li{padding:0 0 1.3rem 1.4rem;position:relative}
+.tl li::before{content:"";position:absolute;left:-6px;top:.45rem;width:11px;height:11px;border-radius:50%;background:#d4b878}
+.tl .when{color:#d4b878;font-size:.95rem}.tl b{font-family:var(--serif);font-size:1.4rem;font-weight:600;display:block}
+/* rsvp */
+.rsvp{max-width:760px;margin:0 auto;padding:1rem 1.25rem 7rem}
+.rhead{display:flex;align-items:center;gap:1rem;justify-content:space-between;margin-bottom:1.25rem}
+.bar{height:4px;background:var(--paper2);border-radius:2px;margin-bottom:1.75rem}.bar i{display:block;height:100%;background:var(--brick);border-radius:2px;transition:width .4s}
+.foot{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1.5px solid var(--line);padding:.8rem 1rem calc(.8rem + env(safe-area-inset-bottom));display:flex;gap:.75rem;justify-content:center;z-index:15}
+.foot .btn{flex:1;max-width:260px}
+/* dial */
+.dialwrap{display:grid;justify-items:center;gap:.75rem}
+.dial{--d:min(84vw,330px);width:var(--d);height:var(--d);position:relative;border-radius:50%;background:radial-gradient(circle at 50% 45%,#fffdf8 0 38%,var(--paper2) 39% 100%);border:2px solid var(--brass);box-shadow:inset 0 0 0 7px var(--paper),inset 0 0 0 8px var(--line),0 10px 26px rgba(36,31,26,.12)}
+.dial .n{position:absolute;width:16%;height:16%;transform:translate(-50%,-50%);border-radius:50%;border:1.5px solid var(--line);background:var(--card);font-family:var(--serif);font-size:calc(var(--d)*.085);font-weight:600;display:grid;place-items:center;z-index:2;transition:color .3s,opacity .3s,filter .3s}
+.dial .n[aria-checked=true]{color:#fff8ef;border-color:transparent}
+.dial .n[aria-disabled=true]{opacity:.35;filter:blur(1.4px);cursor:not-allowed}
+.dial .ptr{position:absolute;width:16%;height:16%;transform:translate(-50%,-50%);border-radius:50%;background:var(--brick);z-index:1;transition:left .55s cubic-bezier(.3,1.35,.5,1),top .55s cubic-bezier(.3,1.35,.5,1);box-shadow:0 3px 8px rgba(138,58,47,.4)}
+.dial .stop{position:absolute;width:9%;height:3.2%;background:var(--brass);border-radius:3px;transform:translate(-50%,-50%) rotate(var(--r))}
+.dial .mid{position:absolute;inset:30%;border-radius:50%;display:grid;place-items:center;text-align:center;align-content:center;line-height:1.05}
+.dial .mid b{font-family:var(--serif);font-size:calc(var(--d)*.2);font-weight:600}
+.dial .mid span{font-size:.85rem;color:var(--muted)}
+.cust{display:flex;gap:.5rem;align-items:flex-start}
+.cust input{width:110px;min-height:48px;padding:0 .8rem;border:1.5px solid var(--line);border-radius:6px;background:#fffdf8}
+.cust .err{color:var(--err);font-size:.9rem;flex-basis:100%}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{min-height:50px;min-width:96px;padding:0 1.2rem;background:var(--card);border:0;font-weight:600}
+.seg button+button{border-left:1.5px solid var(--line)}
+.seg button[aria-pressed=true]{background:var(--pine);color:var(--paper)}
+.alloc{border-top:1.5px solid var(--line)}
+.alloc .it{display:grid;grid-template-columns:1fr auto;gap:.25rem 1rem;align-items:center;padding:1rem 0;border-bottom:1.5px solid var(--line)}
+.alloc .it p{grid-column:1/-1;font-size:.92rem;color:var(--muted)}
+.alloc .cnt{min-width:64px;min-height:48px;border:1.5px solid var(--line);border-radius:6px;background:var(--card);font-family:var(--serif);font-size:1.5rem;font-weight:600}
+.alloc .cnt:disabled{background:var(--paper2);color:var(--muted)}
+.rem{position:sticky;top:0;background:var(--paper);padding:.7rem 0;border-bottom:1.5px solid var(--line);z-index:5;display:flex;justify-content:space-between;gap:1rem;font-weight:600}
+.sum{display:grid;gap:1.25rem}
+.sum section{border-top:1.5px solid var(--line);padding-top:.9rem}
+.sum h3{margin-bottom:.4rem}
+.sum ul{list-style:none;padding:0}.sum li{display:flex;justify-content:space-between;gap:1rem;padding:.2rem 0}
+dialog{border:0;border-radius:10px;padding:0;background:var(--card);color:var(--ink);max-width:min(92vw,440px);width:100%;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(25,22,18,.6)}
+dialog .in{padding:1.4rem;display:grid;gap:1rem;justify-items:center}
+dialog .in>*{max-width:100%}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff8ef;padding:.8rem 1.2rem;border-radius:6px;z-index:60;max-width:90vw;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.toast.bad{background:var(--err)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="live" class="sr" aria-live="polite" style="position:absolute;left:-9999px"></div>
+
+<script type="module">
+/* =====================================================================
+   NOWORRIES Guest Portal
+   ---------------------------------------------------------------------
+   Backend contracts this portal expects (none were provided, so these are
+   REQUIRED endpoints — confirm/implement them on the Render backend).
+   All except /health and /api/public/firebase-config and
+   /api/guest/register require "Authorization: Bearer <Firebase ID token>"
+   and must be authorised server-side (role = guest, ownership checks).
+
+   GET  /health
+   GET  /api/public/firebase-config   -> { apiKey, authDomain, projectId, appId }   (Web SDK config;
+                                         needed so ONLY api_url must be set here)
+   POST /api/guest/register           { name, address, phone, email, password }
+                                       -> 201 { guestId }  (creates Firebase user, global email
+                                          uniqueness, guest role, permanent Guest ID; 409 if email exists)
+   GET  /api/guest/me                 -> { guest:{ guestId, name, address, phone, email } }
+                                       (401 bad token, 403 non-guest role)
+   GET  /api/guest/events             -> { events:[{ eventId, brideName, groomName, date, venue,
+                                          photoUrl, attendanceStatus:"confirmed"|"pending", timeZone }] }
+   POST /api/guest/events/join        { eventId:"XXXX-XXXX-XXXX", pin:"1234" } -> { event } (409 duplicate)
+   GET  /api/guest/events/:eventId    -> { event, submission|null }
+        event: { hostName, bride:{name,photoUrl}, groom:{name,photoUrl}, message, venue, date,
+                 timeZone, dressCode, accommodation:{ instructions }|null, timeline:[{title,date,time,description}],
+                 limits:{ maxAttendance },
+                 diet:{ categories:[{key,label,description}],
+                        meals:[{key,label,options:[{key,label}]}],
+                        allergies:[{key,label}],
+                        kitchen:{ strictVegetarianSeparation, allergenSafePreparation } },
+                 permissions:{ canSubmit, canEditFood, canEditAccommodation },   <- computed by SERVER
+                 foodEditDeadline (ISO, 48h before event, event-local) }
+        submission: { attendance, diet:{[catKey]:n}, meals:{[optKey]:n}, allergies:{[key]:n},
+                      allergyNotes, accommodation:{required,count}, submittedAt, updatedAt }
+   POST /api/guest/events/:eventId/submission   first confirmation (atomic, idempotent per guest)
+   PUT  /api/guest/events/:eventId/submission   edits (server keeps attendance fixed, enforces deadline)
+        body: { attendance, diet, meals, allergies, allergyNotes, accommodation }
+   Live updates: the portal re-fetches the event every 60s while open (no private data of other guests).
+   ===================================================================== */
+const api_url = "https://your-backend.onrender.com";
+
+/* ---------- tiny DOM helpers (textContent only -> no XSS) ---------- */
+function h(tag, props, ...kids){
+  const el = document.createElement(tag);
+  for(const [k,v] of Object.entries(props||{})){
+    if(v==null||v===false) continue;
+    if(k==='class') el.className=v;
+    else if(k.startsWith('on')) el.addEventListener(k.slice(2),v);
+    else if(k==='text') el.textContent=v;
+    else if(k==='for') el.setAttribute('for',v);
+    else if(k in el && !k.startsWith('aria') && k!=='role' && k!=='list'){ try{el[k]=v}catch{el.setAttribute(k,v)} }
+    else el.setAttribute(k,v===true?'':v);
+  }
+  for(const kid of kids.flat(Infinity)){ if(kid==null||kid===false) continue; el.append(kid.nodeType?kid:document.createTextNode(String(kid))); }
+  return el;
+}
+const root = document.getElementById('app');
+const safeUrl = u => { try{ const x=new URL(u); return x.protocol==='https:'?x.href:''; }catch{ return ''; } };
+const announce = t => { document.getElementById('live').textContent=t; };
+function toast(msg,bad){ const t=h('div',{class:'toast'+(bad?' bad':''),role:'status'},msg); document.body.append(t); setTimeout(()=>t.remove(),4200); }
+
+/* ---------- API layer ---------- */
+class ApiError extends Error{ constructor(kind,status,message,data){ super(message); this.kind=kind; this.status=status; this.data=data; } }
+let fb = {};                // firebase handles
+async function api(path,{method='GET',body,auth=true,timeout=15000,retry=true}={}){
+  const headers={'Accept':'application/json'};
+  if(body!==undefined) headers['Content-Type']='application/json';
+  if(auth){
+    const u=fb.auth&&fb.auth.currentUser;
+    if(!u) throw new ApiError('auth',401,'Please log in again.');
+    try{ headers.Authorization='Bearer '+await u.getIdToken(); }catch{ throw new ApiError('network',0,'Could not refresh your session.'); }
+  }
+  const ctl=new AbortController(); const timer=setTimeout(()=>ctl.abort(),timeout);
+  let res;
+  try{ res=await fetch(api_url.replace(/\/$/,'')+path,{method,headers,body:body!==undefined?JSON.stringify(body):undefined,signal:ctl.signal,cache:'no-store'}); }
+  catch(e){ throw new ApiError(e.name==='AbortError'?'timeout':'network',0,e.name==='AbortError'?'The server took too long to respond.':'Unable to reach the server.'); }
+  finally{ clearTimeout(timer); }
+  let data=null; try{ data=await res.json(); }catch{}
+  if(res.ok) return data;
+  const msg=(data&&(data.error||data.message))||'Something went wrong.';
+  if(res.status===401){
+    if(auth&&retry&&fb.auth.currentUser){ try{ await fb.auth.currentUser.getIdToken(true); return api(path,{method,body,auth,timeout,retry:false}); }catch{} }
+    throw new ApiError('auth',401,'Your session has expired. Please log in again.',data);
+  }
+  if(res.status===403) throw new ApiError('forbidden',403,msg,data);
+  if(res.status===404 && !(data&&(data.error||data.message))) throw new ApiError('missing',404,'This feature is not available on the server yet ('+path+').',data);
+  if(res.status===404) throw new ApiError('notfound',404,msg,data);
+  if(res.status>=500) throw new ApiError('server',res.status,'The server had a problem. Please try again shortly.',data);
+  throw new ApiError('client',res.status,msg,data);
+}
+
+/* ---------- state ---------- */
+const S = { view:'boot', guest:null, events:null, ev:null, authMsg:null, authTab:'login', busy:false, err:null };
+let seq=0, pollTimer=null;
+
+/* ---------- formatting ---------- */
+function fmtDate(s,tz,withTime){
+  if(!s) return '';
+  try{
+    if(/^\d{4}-\d{2}-\d{2}$/.test(s)){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }
+    const o={weekday:'long',day:'numeric',month:'long',year:'numeric'}; if(withTime){o.hour='numeric';o.minute='2-digit';o.timeZoneName='short';} if(tz) o.timeZone=tz;
+    return new Date(s).toLocaleString(undefined,o);
+  }catch{ return String(s); }
+}
+const initials = n => (String(n||'?').trim()[0]||'?').toUpperCase();
+const sum = o => Object.values(o||{}).reduce((a,b)=>a+(+b||0),0);
+
+/* ---------- boot ---------- */
+async function boot(){
+  S.view='boot'; render();
+  try{ await api('/health',{auth:false,timeout:8000}); }
+  catch(e){ S.err=e; S.view='offline'; return render(); }
+  try{
+    if(!fb.auth){
+      const cfg=await api('/api/public/firebase-config',{auth:false});
+      const [{initializeApp},A]=await Promise.all([import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js'),import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js')]);
+      const app=initializeApp(cfg.config||cfg); fb.A=A; fb.auth=A.getAuth(app);
+      await A.setPersistence(fb.auth,A.browserLocalPersistence);
+      A.onAuthStateChanged(fb.auth,handleUser);   // fires once with the restored session (or null)
+    } else handleUser(fb.auth.currentUser);
+  }catch(e){ S.err=e.kind?e:new ApiError('network',0,'Unable to load authentication.'); S.view='offline'; render(); }
+}
+async function handleUser(user){
+  const my=++seq;
+  if(!user){ stopPoll(); S.guest=null; S.events=null; S.ev=null; S.view='auth'; return render(); }
+  S.view='restoring'; render();
+  try{
+    const [me,evs]=await Promise.all([api('/api/guest/me'),api('/api/guest/events')]);
+    if(my!==seq) return;
+    S.guest=me.guest; S.events=evs.events||[];
+    S.view='app'; route();
+  }catch(e){
+    if(my!==seq) return;
+    if(e.kind==='auth'||e.kind==='forbidden'){
+      S.authMsg=e.kind==='forbidden'?'This portal is for guest accounts only. Please use the Host or Caterer portal for those accounts.':e.message;
+      await fb.A.signOut(fb.auth);
+    } else { S.err=e; S.view='offline'; render(); }
+  }
+}
+async function logout(){ stopPoll(); await fb.A.signOut(fb.auth); S.guest=null; S.events=null; S.ev=null; S.authMsg=null; location.hash=''; }
+
+/* ---------- routing (hash; contains no secrets) ---------- */
+addEventListener('hashchange',()=>{ if(S.view==='app') route(); });
+function route(){
+  const hash=location.hash.replace(/^#\/?/,'');
+  const [page,id]=hash.split('/');
+  S.page=['home','join','profile','event'].includes(page)?page:'home';
+  if(S.page!=='event'){ stopPoll(); S.ev=null; }
+  if(S.page==='event'&&id){ if(!S.ev||S.ev.id!==decodeURIComponent(id)) openEvent(decodeURIComponent(id)); }
+  else if(S.page==='event'){ location.hash='#/home'; return; }
+  if(S.page==='home') refreshEvents();
+  render();
+}
+async function refreshEvents(){ try{ const r=await api('/api/guest/events'); S.events=r.events||[]; if(S.page==='home') render(); }catch(e){ if(e.kind==='auth') handleUser(null); } }
+
+/* ---------- views ---------- */
+function render(){
+  root.replaceChildren();
+  const sy=window.scrollY;
+  switch(S.view){
+    case 'boot': root.append(loading('Connecting to NOWORRIES…')); break;
+    case 'restoring': root.append(loading('Restoring your session…')); break;
+    case 'offline': root.append(offlineView()); break;
+    case 'auth': root.append(authView()); break;
+    case 'app': root.append(appView()); break;
+  }
+  window.scrollTo(0,S.keepScroll?sy:0); S.keepScroll=false;
+}
+const loading = t => h('div',{class:'center'},h('div',{class:'box',role:'status'},h('div',{class:'spin'}),h('p',{class:'muted'},t)));
+function offlineView(){
+  const e=S.err||{}; const net=!e.kind||e.kind==='network'||e.kind==='timeout';
+  const title=net?'Unable to connect to NOWORRIES servers.':e.kind==='missing'?'A required server feature is missing.':e.kind==='server'?'The server is having trouble.':'Something went wrong.';
+  const body=net?"We're currently unable to establish a connection. Please check your internet connection or try again shortly.":(e.message||'Please try again.');
+  return h('div',{class:'center'},h('div',{class:'box'},h('h2',{},title),h('p',{class:'muted'},body),
+    h('button',{class:'btn',onclick:()=>{ if(S.guest&&fb.auth&&fb.auth.currentUser) handleUser(fb.auth.currentUser); else boot(); }},'Retry Connection')));
+}
+
+/* ---- auth ---- */
+function authView(){
+  const reg=S.authTab==='register';
+  const hero=h('div',{class:'auth-hero'},h('div',{class:'brand'},'NOWORRIES'),
+    h('div',{},h('h1',{},'Your invitation,',h('br'),'all in one place.'),h('p',{style:'margin-top:.75rem'},'Join a wedding, tell the hosts who is coming and what your family needs at the table.')));
+  const msg=S.authMsg&&h('div',{class:'alert bad',role:'alert'},S.authMsg);
+  const tabs=h('div',{class:'tabs',role:'tablist'},
+    h('button',{role:'tab','aria-selected':!reg,onclick:()=>{S.authTab='login';S.authMsg=null;render();}},'Log in'),
+    h('button',{role:'tab','aria-selected':reg,onclick:()=>{S.authTab='register';S.authMsg=null;render();}},'Create account'));
+  return h('div',{class:'auth'},hero,h('main',{class:'auth-main'},tabs,msg,reg?registerForm():loginForm()));
+}
+function field(id,label,type,opts={}){
+  const inp=h(opts.area?'textarea':'input',{id,name:id,type:opts.area?null:type,autocomplete:opts.ac,inputmode:opts.im,maxlength:opts.max,required:true,value:opts.value});
+  return h('div',{class:'field'},h('label',{for:id},label),inp,h('div',{class:'err',id:id+'-e'}));
+}
+function setErr(form,id,m){ const i=form.querySelector('#'+id), e=form.querySelector('#'+id+'-e'); if(e) e.textContent=m||''; if(i) i.setAttribute('aria-invalid',m?'true':'false'); return !!m; }
+const EMAIL=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function authErr(e){
+  const c=e.code||'';
+  if(['auth/invalid-credential','auth/wrong-password','auth/user-not-found','auth/invalid-email'].includes(c)) return 'Incorrect email or password.';
+  if(c==='auth/too-many-requests') return 'Too many attempts. Please wait a few minutes and try again.';
+  if(c==='auth/network-request-failed') return 'Network error. Check your connection and try again.';
+  if(c==='auth/user-disabled') return 'This account has been disabled.';
+  return e.message||'Could not complete that request.';
+}
+function loginForm(){
+  const f=h('form',{class:'stack',novalidate:true},field('email','Email','email',{ac:'email'}),field('password','Password','password',{ac:'current-password'}),
+    h('button',{class:'btn',type:'submit'},'Log in'),h('div',{},h('button',{class:'link',type:'button',onclick:forgot},'Forgot your password?')));
+  f.addEventListener('submit',async ev=>{
+    ev.preventDefault(); const email=f.email.value.trim(), pw=f.password.value;
+    let bad=setErr(f,'email',EMAIL.test(email)?'':'Enter a valid email address.'); bad=setErr(f,'password',pw?'':'Enter your password.')||bad; if(bad) return;
+    const b=f.querySelector('button[type=submit]'); b.disabled=true; b.textContent='Logging in…'; S.authMsg=null;
+    try{ await fb.A.signInWithEmailAndPassword(fb.auth,email,pw); }   // handleUser takes over
+    catch(e){ b.disabled=false; b.textContent='Log in'; S.authMsg=authErr(e); render(); }
+  });
+  return f;
+}
+function registerForm(){
+  const f=h('form',{class:'stack',novalidate:true},
+    field('name','Head of family','text',{ac:'name',max:80}),field('address','Address','text',{ac:'street-address',max:200,area:true}),
+    field('phone','Phone number','tel',{ac:'tel',im:'tel',max:20}),field('email','Email','email',{ac:'email'}),
+    field('password','Password (8+ characters)','password',{ac:'new-password'}),field('confirm','Confirm password','password',{ac:'new-password'}),
+    h('button',{class:'btn',type:'submit'},'Create account'));
+  f.addEventListener('submit',async ev=>{
+    ev.preventDefault();
+    const v={name:f.name.value.trim(),address:f.address.value.trim(),phone:f.phone.value.trim(),email:f.email.value.trim(),password:f.password.value};
+    let bad=false;
+    bad=setErr(f,'name',v.name.length<2?'Enter the head of family’s name.':'')||bad;
+    bad=setErr(f,'address',v.address.length<5?'Enter your address.':'')||bad;
+    bad=setErr(f,'phone',/^\+?[0-9 ()\-]{7,18}$/.test(v.phone)?'':'Enter a valid phone number.')||bad;
+    bad=setErr(f,'email',EMAIL.test(v.email)?'':'Enter a valid email address.')||bad;
+    bad=setErr(f,'password',v.password.length<8?'Use at least 8 characters.':'')||bad;
+    bad=setErr(f,'confirm',f.confirm.value!==v.password?'Passwords do not match.':'')||bad;
+    if(bad) return;
+    const b=f.querySelector('button[type=submit]'); b.disabled=true; b.textContent='Creating account…'; S.authMsg=null;
+    try{ await api('/api/guest/register',{method:'POST',body:v,auth:false}); }
+    catch(e){ b.disabled=false; b.textContent='Create account'; S.authMsg=e.status===409?'An account with this email already exists. Please log in instead.':e.message; return render(); }
+    try{ await fb.A.signInWithEmailAndPassword(fb.auth,v.email,v.password); }
+    catch(e){ S.authTab='login'; S.authMsg='Your account was created. Please log in to continue.'; render(); }
+  });
+  return f;
+}
+function forgot(){
+  const f=h('form',{class:'stack',novalidate:true},h('h3',{},'Reset your password'),h('p',{class:'muted'},'Enter your account email and we’ll send a reset link.'),
+    field('rmail','Email','email',{ac:'email'}),h('div',{class:'row'},h('button',{class:'btn',type:'submit'},'Send link'),h('button',{class:'btn ghost',type:'button',onclick:()=>d.close()},'Cancel')));
+  const d=dialog(f);
+  f.addEventListener('submit',async ev=>{
+    ev.preventDefault(); const em=f.rmail.value.trim(); if(setErr(f,'rmail',EMAIL.test(em)?'':'Enter a valid email address.')) return;
+    try{ await fb.A.sendPasswordResetEmail(fb.auth,em); }catch(e){ if(e.code==='auth/network-request-failed'){ return setErr(f,'rmail','Network error. Please try again.'); } }
+    d.close(); toast('If that email has an account, a reset link is on its way.');
+  });
+}
+function dialog(content){
+  const d=h('dialog',{'aria-modal':'true'},h('div',{class:'in'},content));
+  d.addEventListener('close',()=>d.remove()); document.body.append(d); d.showModal(); return d;
+}
+function confirmBox(title,text,okLabel,onOk){
+  const d=dialog(h('div',{class:'stack',style:'width:100%'},h('h3',{},title),h('p',{class:'muted'},text),
+    h('div',{class:'row'},h('button',{class:'btn',onclick:()=>{d.close();onOk();}},okLabel),h('button',{class:'btn ghost',onclick:()=>d.close()},'Cancel'))));
+}
+
+/* ---- app shell ---- */
+function appView(){
+  if(S.page==='event') return eventView();
+  const nav=h('nav',{class:'nav','aria-label':'Main'},
+    h('a',{href:'#/home','aria-current':S.page==='home'?'page':null},'Home'),
+    h('a',{href:'#/join','aria-current':S.page==='join'?'page':null},'Join'),
+    h('span',{class:'spacer'}),
+    h('a',{class:'profile',href:'#/profile','aria-current':S.page==='profile'?'page':null},'Profile'));
+  const page=S.page==='join'?joinView():S.page==='profile'?profileView():homeView();
+  return h('div',{class:'shell'},nav,h('main',{class:'page'},page));
+}
+function homeView(){
+  const g=S.guest, evs=(S.events||[]).slice().sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  const today=new Date().toISOString().slice(0,10); const next=evs.find(e=>String(e.date).slice(0,10)>=today);
+  const hello=h('div',{class:'hello'},h('h1',{},'Welcome, '+g.name),h('p',{class:'muted',style:'margin-top:.5rem'},'Guest ID  ',h('span',{class:'gid'},g.guestId)));
+  const card=e=>{
+    const img=safeUrl(e.photoUrl); const isNext=next&&e.eventId===next.eventId&&evs.length>1;
+    const conf=e.attendanceStatus==='confirmed';
+    return h('button',{class:'ev'+(isNext?' next':''),onclick:()=>{location.hash='#/event/'+encodeURIComponent(e.eventId);}},
+      h('div',{class:'ph',style:img?`background-image:url("${img}")`:null},img?null:initials(e.brideName)+initials(e.groomName)),
+      h('div',{class:'body'},isNext&&h('span',{class:'kicker muted small'},'Next up'),h('h3',{},e.brideName+' & '+e.groomName),
+        h('span',{},fmtDate(e.date,e.timeZone)),h('span',{class:'muted'},e.venue||''),
+        h('span',{class:'status '+(conf?'ok':'wait')},conf?'Attendance confirmed':'Awaiting your response')));
+  };
+  let list;
+  if(!S.events) list=h('div',{class:'list'},h('div',{class:'skel'}),h('div',{class:'skel'}));
+  else if(!evs.length) list=h('div',{class:'stack'},h('h2',{},'No weddings yet'),h('p',{class:'muted'},'Ask your host for the Event ID and four-digit PIN, then join the celebration.'),h('a',{class:'btn',href:'#/join'},'Join a wedding'));
+  else list=h('div',{class:'list'},evs.map(card),h('div',{},h('a',{class:'btn ghost',href:'#/join'},'Join another wedding')));
+  return h('div',{},hello,list);
+}
+function profileView(){
+  const g=S.guest;
+  return h('div',{class:'stack'},h('h1',{},'Profile'),
+    h('dl',{class:'kv'},h('dt',{},'Head of family'),h('dd',{},g.name),h('dt',{},'Guest ID'),h('dd',{},g.guestId),h('dt',{},'Email'),h('dd',{},g.email),h('dt',{},'Phone'),h('dd',{},g.phone),h('dt',{},'Address'),h('dd',{},g.address)),
+    h('button',{class:'btn ghost',onclick:()=>confirmBox('Log out?','You’ll need to log in again to see your weddings. Your saved responses are kept.','Log out',logout)},'Log out'));
+}
+function joinView(){
+  const f=h('form',{class:'stack',novalidate:true,style:'max-width:440px'},
+    h('p',{class:'muted'},'Enter the Event ID and PIN your hosts shared with you.'),
+    field('eid','Event ID','text',{max:14,ac:'off'}),field('pin','Access PIN','text',{im:'numeric',max:4,ac:'off'}),
+    h('button',{class:'btn',type:'submit'},'Join wedding'));
+  f.eid.placeholder='XXXX-XXXX-XXXX'; f.eid.style.letterSpacing='.08em';
+  f.eid.addEventListener('input',()=>{ const c=f.eid.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,12); f.eid.value=c.match(/.{1,4}/g)?.join('-')||''; });
+  f.pin.addEventListener('input',()=>{ f.pin.value=f.pin.value.replace(/\D/g,'').slice(0,4); });
+  f.addEventListener('submit',async ev=>{
+    ev.preventDefault(); let bad=setErr(f,'eid',/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(f.eid.value)?'':'Event ID must look like XXXX-XXXX-XXXX.');
+    bad=setErr(f,'pin',/^\d{4}$/.test(f.pin.value)?'':'Enter the four-digit PIN.')||bad; if(bad) return;
+    const b=f.querySelector('button[type=submit]'); b.disabled=true; b.textContent='Joining…';
+    try{ const r=await api('/api/guest/events/join',{method:'POST',body:{eventId:f.eid.value,pin:f.pin.value}});
+      toast('You’ve joined the wedding.'); const id=(r&&r.event&&r.event.eventId)||f.eid.value; await refreshEvents(); location.hash='#/event/'+encodeURIComponent(id);
+    }catch(e){ b.disabled=false; b.textContent='Join wedding'; if(e.kind==='auth') return handleUser(null);
+      setErr(f,'pin',e.status===409?'You have already joined this wedding.':e.status===400||e.status===404||e.status===403?'We couldn’t verify that Event ID and PIN.':e.message); }
+  });
+  return h('div',{},h('h1',{style:'margin-bottom:1rem'},'Join a wedding'),f);
+}
+
+/* ---------- event ---------- */
+async function openEvent(id){
+  S.ev={id,loading:true,mode:'story',chapter:0,step:0};
+  render();
+  try{ await loadEvent(true); }
+  catch(e){ if(e.kind==='auth') return handleUser(null); S.ev.error=e; S.ev.loading=false; }
+  startPoll(); render();
+}
+async function loadEvent(initial){
+  const ev=S.ev; const r=await api('/api/guest/events/'+encodeURIComponent(ev.id));
+  if(S.ev!==ev) return;
+  ev.data=r.event; ev.sub=r.submission||null; ev.loading=false;
+  if(initial||!ev.dirty()){ ev.draft=draftFrom(ev.sub); ev.base=JSON.stringify(ev.draft); }
+}
+function draftFrom(s){ return s?{attendance:s.attendance,diet:{...s.diet},meals:{...s.meals},allergies:{...s.allergies},allergyNotes:s.allergyNotes||'',acc:{required:s.accommodation?!!s.accommodation.required:null,count:s.accommodation?+s.accommodation.count||0:0}}
+  :{attendance:null,diet:{},meals:{},allergies:{},allergyNotes:'',acc:{required:null,count:0}}; }
+function startPoll(){ stopPoll(); pollTimer=setInterval(async()=>{
+  if(document.hidden||!S.ev||S.ev.loading||S.ev.mode==='wizard'||S.ev.submitting) return;
+  try{ const before=JSON.stringify([S.ev.data,S.ev.sub]); await loadEvent(false); if(JSON.stringify([S.ev.data,S.ev.sub])!==before){ S.keepScroll=true; render(); } }catch(e){ if(e.kind==='auth') handleUser(null); }
+},60000); }
+function stopPoll(){ clearInterval(pollTimer); pollTimer=null; }
+const dirtyFn = () => { const e=S.ev; return !!e&&e.base!==JSON.stringify(e.draft); };
+
+function eventView(){
+  const ev=S.ev;
+  if(!ev||ev.loading) return h('div',{class:'page'},h('div',{class:'skel',style:'min-height:60vh'}));
+  if(ev.error){ const e=ev.error; return h('div',{class:'center'},h('div',{class:'box'},h('h2',{},e.kind==='network'||e.kind==='timeout'?'Unable to connect to NOWORRIES servers.':'We couldn’t open this wedding.'),h('p',{class:'muted'},e.message),
+    h('div',{class:'row'},h('button',{class:'btn',onclick:()=>openEvent(ev.id)},'Retry'),h('a',{class:'btn ghost',href:'#/home'},'Back to dashboard')))); }
+  ev.dirty=dirtyFn;
+  return ev.mode==='wizard'?wizardView():storyView();
+}
+const perm = () => S.ev.data.permissions||{};
+const DESC={vegetarian:'Meat- and fish-free dishes.',vegan:'No animal products, including dairy and honey.',jain:'No meat or root vegetables such as onion and garlic.',satvik:'Simple, pure vegetarian food without onion, garlic or strong spices.','non-vegetarian':'Includes meat, poultry or fish.',nonvegetarian:'Includes meat, poultry or fish.'};
+
+/* ---- cinematic story ---- */
+function chapters(){
+  const d=S.ev.data, c=[];
+  c.push('host','couple'); if(d.message) c.push('message'); c.push('details'); if((d.timeline||[]).length) c.push('timeline'); c.push('response'); return c;
+}
+function storyView(){
+  const ev=S.ev, d=ev.data, list=chapters(); ev.chapter=Math.min(ev.chapter,list.length-1); const key=list[ev.chapter];
+  const couple=(p,fallback)=>{ const img=safeUrl(p&&p.photoUrl); return h('figure',{},h('div',{class:'frame'},img?h('img',{src:img,alt:(p&&p.name)||fallback,loading:'lazy'}):initials(p&&p.name)),h('figcaption',{},(p&&p.name)||fallback)); };
+  let stage;
+  if(key==='host') stage=[h('span',{class:'kicker'},'You are invited'),h('h1',{},d.hostName||'Your hosts'),h('p',{},'invite you to celebrate the wedding of '+(d.bride&&d.bride.name||'')+' and '+(d.groom&&d.groom.name||'')+'.')];
+  else if(key==='couple') stage=[h('div',{class:'couple'},couple(d.bride,'Bride'),h('span',{class:'amp'},'&'),couple(d.groom,'Groom')),h('span',{class:'kicker'},fmtDate(d.date,d.timeZone))];
+  else if(key==='message') stage=[h('span',{class:'kicker'},'A note from the couple'),h('p',{class:'quote'},d.message)];
+  else if(key==='details'){
+    const rows=[['Date',fmtDate(d.date,d.timeZone)],['Venue',d.venue],['Dress code',d.dressCode],['Accommodation',d.accommodation&&d.accommodation.instructions]].filter(r=>r[1]);
+    stage=[h('h2',{},'The details'),h('dl',{class:'facts'},rows.map(r=>h('div',{},h('dt',{},r[0]),h('dd',{style:'white-space:pre-wrap'},r[1]))))];
+  } else if(key==='timeline') stage=[h('h2',{},'The celebration'),h('ol',{class:'tl'},d.timeline.map(t=>h('li',{},h('span',{class:'when'},[t.date&&fmtDate(t.date,d.timeZone),t.time].filter(Boolean).join(' · ')),h('b',{},t.title),t.description&&h('span',{style:'color:#e6dfcd'},t.description))))];
+  else stage=responseChapter();
+  const last=ev.chapter===list.length-1;
+  return h('div',{class:'story'},
+    h('div',{class:'top'},h('a',{class:'btn lghost',href:'#/home',style:'min-height:44px'},'← Dashboard'),h('span',{class:'small',style:'color:#d4b878'},(ev.chapter+1)+' / '+list.length)),
+    h('div',{class:'stage',key},stage,
+      key==='response'?null:null),
+    h('div',{class:'controls'},h('div',{class:'segs','aria-hidden':'true'},list.map((_,i)=>h('i',{class:i<=ev.chapter?'on':''}))),
+      h('div',{class:'btns'},ev.chapter>0&&h('button',{class:'btn lghost',onclick:()=>{ev.chapter--;render();}},'Back'),
+        !last&&h('button',{class:'btn light',onclick:()=>{ev.chapter++;render();}},'Continue'))));
+}
+function responseChapter(){
+  const ev=S.ev, d=ev.data, p=perm(), out=[];
+  if(ev.sub){
+    out.push(h('h2',{},'Your response'),h('p',{},'Submitted '+fmtDate(ev.sub.updatedAt||ev.sub.submittedAt,d.timeZone,true)+'.'));
+    out.push(h('div',{style:'background:var(--paper);color:var(--ink);padding:1.25rem;border-radius:8px;text-align:left;width:min(100%,520px)'},summary(ev.sub)));
+    if(p.canEditFood||p.canEditAccommodation) out.push(h('button',{class:'btn light',onclick:()=>startWizard()},'Edit my preferences'));
+    out.push(h('p',{class:'small'},deadlineText()));
+  } else if(p.canSubmit===false){
+    out.push(h('h2',{},'Responses are closed'),h('p',{},'This wedding is no longer accepting responses. Please contact your hosts.'));
+  } else {
+    out.push(h('span',{class:'kicker'},'Will you join us?'),h('h2',{},'Confirm your family’s attendance'),h('p',{},'It takes a minute: who is coming, what they eat and whether you need a place to stay.'),
+      h('button',{class:'btn light',onclick:()=>startWizard()},'Begin'),h('p',{class:'small'},deadlineText()));
+  }
+  return out;
+}
+function deadlineText(){
+  const d=S.ev.data; if(!d.foodEditDeadline) return '';
+  const p=perm();
+  if(S.ev.sub&&!p.canEditFood) return 'Food preferences were locked on '+fmtDate(d.foodEditDeadline,d.timeZone,true)+' (48 hours before the event) and can no longer be changed. Your submission is kept as it was.';
+  return 'Food preferences can be changed until '+fmtDate(d.foodEditDeadline,d.timeZone,true)+'.';
+}
+
+/* ---- summary ---- */
+function lookups(){
+  const d=S.ev.data.diet||{}, m={};
+  (d.categories||[]).forEach(c=>m[c.key]=c.label); (d.meals||[]).forEach(s=>(s.options||[]).forEach(o=>m[o.key]=o.label)); (d.allergies||[]).forEach(a=>m[a.key]=a.label); return m;
+}
+function summary(x){
+  const d=S.ev.data, diet=d.diet||{}, L=lookups(), acc=x.acc||x.accommodation||{};
+  const att=x.attendance; const mk=(o)=>Object.entries(o||{}).filter(([k,v])=>+v>0).map(([k,v])=>h('li',{},h('span',{},L[k]||k),h('b',{},v)));
+  const sec=(t,items,empty)=>h('section',{},h('h3',{},t),items.length?h('ul',{},items):h('p',{class:'muted small'},empty));
+  const secs=[h('section',{},h('h3',{},'Attending'),h('p',{},h('b',{},att),' '+(att===1?'person':'people')+' · '+(d.bride&&d.bride.name||'')+' & '+(d.groom&&d.groom.name||'')+', '+fmtDate(d.date,d.timeZone)))];
+  if((diet.categories||[]).length) secs.push(sec('Main course',mk(x.diet),'No main-course choices recorded.'));
+  (diet.meals||[]).forEach(s=>{ const items=(s.options||[]).filter(o=>+(x.meals||{})[o.key]>0).map(o=>h('li',{},h('span',{},o.label),h('b',{},x.meals[o.key]))); secs.push(sec(s.label,items,'None selected.')); });
+  if((diet.allergies||[]).length){ const items=mk(x.allergies); secs.push(h('section',{},h('h3',{},'Allergies and intolerances'),items.length?h('ul',{},items):h('p',{class:'muted small'},'None declared.'),x.allergyNotes&&h('p',{class:'small',style:'white-space:pre-wrap;margin-top:.4rem'},'Notes: '+x.allergyNotes))); }
+  secs.push(h('section',{},h('h3',{},'Accommodation'),h('p',{},acc.required?('Needed for '+acc.count+(acc.count===1?' person':' people')):'Not needed')));
+  return h('div',{class:'sum'},secs);
+}
+
+/* ---------- rotary dial ---------- */
+const dialMemory={};
+function dialPos(i,n){ const th=(60-i*(270/(n-1)))*Math.PI/180; return {x:50+38*Math.sin(th),y:50-38*Math.cos(th)}; }
+function makeDial({id,label,values,value,max,unit,center,onPick}){
+  // values: [1..8,'C'] ; numbers > max are disabled. 'C' opens a custom input when max > 8.
+  const n=values.length; let cur=value; let custom=false;
+  const wrap=h('div',{class:'dialwrap'});
+  const dial=h('div',{class:'dial',role:'radiogroup','aria-label':label});
+  const ptr=h('div',{class:'ptr','aria-hidden':'true'}); dial.append(ptr);
+  const stop=h('div',{class:'stop','aria-hidden':'true',style:'left:92%;top:68%;--r:55deg'}); dial.append(stop);
+  const mid=h('div',{class:'mid','aria-hidden':'true'},h('b',{},cur!=null?cur:'–'),h('span',{},center||unit||''));
+  dial.append(mid);
+  const place=v=>{ const i=v==null?-1:values.indexOf(v>8?'C':v); if(i<0){ ptr.style.opacity=0; return; } const p=dialPos(i,n); ptr.style.opacity=1; ptr.style.left=p.x+'%'; ptr.style.top=p.y+'%'; };
+  const btns=values.map((v,i)=>{
+    const dis=v==='C'?max<=8:v>max; const p=dialPos(i,n);
+    const b=h('button',{type:'button',class:'n',role:'radio','aria-checked':String(v===cur||(v==='C'&&cur>8)),'aria-disabled':String(dis),'aria-label':v==='C'?'Custom number':v+' '+(unit||''),tabindex:'-1',style:`left:${p.x}%;top:${p.y}%`},String(v));
+    b.addEventListener('click',()=>{ if(dis) return; if(v==='C'){ openCustom(); return; } pick(v); });
+    b.addEventListener('keydown',e=>{ const ks={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1}; if(!ks[e.key]) return; e.preventDefault(); let j=i; do{ j=(j+ks[e.key]+n)%n; }while(btns[j].getAttribute('aria-disabled')==='true'&&j!==i); btns[j].focus(); });
+    return b;
+  });
+  const sel=btns.findIndex(b=>b.getAttribute('aria-checked')==='true');
+  btns.forEach((b,i)=>{ b.tabIndex=(sel>=0?i===sel:i===btns.findIndex(x=>x.getAttribute('aria-disabled')==='false'))?0:-1; dial.append(b); });
+  function mark(v){ cur=v; btns.forEach((b,i)=>{ const on=values[i]===v||(values[i]==='C'&&v>8); b.setAttribute('aria-checked',String(on)); b.tabIndex=on?0:-1; }); mid.firstChild.textContent=v; place(v); navigator.vibrate&&navigator.vibrate(8); announce(label+': '+v); }
+  function pick(v){ mark(v); closeCustom(); onPick(v); }
+  const cwrap=h('div',{class:'cust'}); cwrap.hidden=true;
+  function openCustom(){ cwrap.hidden=false; cwrap.replaceChildren();
+    const inp=h('input',{type:'number',inputmode:'numeric',min:9,max,'aria-label':'Custom number, 9 to '+max,placeholder:'9–'+max}); const err=h('div',{class:'err',role:'alert'});
+    const ok=h('button',{type:'button',class:'btn',style:'min-height:48px'},'Set');
+    ok.onclick=()=>{ const n=Number(inp.value); if(!Number.isInteger(n)||n<9||n>max){ err.textContent='Enter a whole number from 9 to '+max+'.'; return; } pick(n); };
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); ok.click(); } });
+    cwrap.append(inp,ok,err); inp.focus(); }
+  function closeCustom(){ cwrap.hidden=true; cwrap.replaceChildren(); }
+  wrap.append(dial,cwrap);
+  // animate from the previously rendered position
+  const prev=dialMemory[id]; place(prev); requestAnimationFrame(()=>requestAnimationFrame(()=>{ place(cur); })); dialMemory[id]=cur;
+  return wrap;
+}
+function dialValues(){ return [1,2,3,4,5,6,7,8,'C']; }
+function countSheet({title,max,value,unit,onDone,id}){
+  let d;
+  const dial=makeDial({id:id||'sheet',label:title,values:dialValues(),value:value||null,max,unit,center:unit,onPick:v=>{ setTimeout(()=>{ d.close(); onDone(v); },450); }});
+  d=dialog(h('div',{class:'stack',style:'width:100%;text-align:center'},h('h3',{},title),h('p',{class:'muted small'},max<1?'Nothing left to allocate.':'Up to '+max+' available.'),dial,
+    h('div',{class:'row',style:'justify-content:center'},h('button',{class:'btn ghost',onclick:()=>{ d.close(); onDone(0); }},'None'),h('button',{class:'btn ghost',onclick:()=>d.close()},'Cancel'))));
+}
+
+/* ---------- RSVP wizard ---------- */
+function stepsList(){
+  const d=S.ev.data, diet=d.diet||{}, s=['attendance'];
+  if((diet.categories||[]).length) s.push('dining'); if((diet.meals||[]).some(m=>(m.options||[]).length)) s.push('meals'); if((diet.allergies||[]).length) s.push('allergy');
+  s.push('stay','review'); return s;
+}
+function startWizard(){ S.ev.mode='wizard'; S.ev.step=S.ev.sub?1:0; S.ev.err=null; render(); }
+function clampDraft(){
+  const dr=S.ev.draft, a=dr.attendance||0; let total=sum(dr.diet), trimmed=false;
+  if(total>a){ dr.diet={}; trimmed=true; }
+  for(const o of ['meals','allergies']) for(const k in dr[o]) if(dr[o][k]>a){ dr[o][k]=a; trimmed=true; }
+  if(dr.acc.count>a){ dr.acc.count=a; trimmed=true; }
+  if(trimmed) toast('Some selections were adjusted to fit your new headcount.');
+}
+function wizardView(){
+  const ev=S.ev, d=ev.data, dr=ev.draft, p=perm(), steps=stepsList();
+  ev.step=Math.max(0,Math.min(ev.step,steps.length-1)); const key=steps[ev.step], editing=!!ev.sub;
+  const lockFood=editing&&!p.canEditFood, lockStay=editing&&!p.canEditAccommodation;
+  const att=dr.attendance||0;
+  let body, canNext=true, nextLabel='Continue';
+  const go=n=>{ ev.step+=n; ev.err=null; S.keepScroll=false; render(); };
+  const redraw=()=>{ S.keepScroll=true; render(); };
+  const lockNote=m=>h('div',{class:'alert',role:'note'},m);
+  if(key==='attendance'){
+    const max=(d.limits&&d.limits.maxAttendance)||30;
+    body=[h('h2',{},'How many will attend?'),h('p',{class:'muted'},'Include everyone in your family who is coming, you included.'),
+      editing?[lockNote('Your headcount was confirmed at '+dr.attendance+' and stays fixed. You can still redistribute meals and preferences.'),h('div',{class:'dialwrap'},h('div',{class:'dial'},h('div',{class:'mid'},h('b',{},dr.attendance),h('span',{},'attending'))))]
+        :makeDial({id:'att',label:'Number attending',values:dialValues(),value:dr.attendance,max,unit:'attending',center:'attending',onPick:v=>{ dr.attendance=v; clampDraft(); redraw(); }})];
+    canNext=att>=1;
+  } else if(key==='dining'){
+    const cats=d.diet.categories, used=sum(dr.diet), rem=att-used;
+    body=[h('h2',{},'Main course'),h('p',{class:'muted'},'Share your '+att+' guests across the options the hosts are serving. Each person is counted once.'),
+      lockFood&&lockNote('Food preferences are locked and can no longer be changed.'),
+      h('div',{class:'rem'},h('span',{},'Remaining to allocate'),h('span',{'aria-live':'polite'},rem+' of '+att)),
+      h('div',{class:'alloc'},cats.map(c=>{ const cur=+dr.diet[c.key]||0;
+        return h('div',{class:'it'},h('b',{},c.label),
+          h('button',{class:'cnt',disabled:lockFood,'aria-label':c.label+', '+cur+' selected. Change',onclick:()=>countSheet({id:'d-'+c.key,title:c.label,max:rem+cur,value:cur,unit:'guests',onDone:v=>{ if(v) dr.diet[c.key]=v; else delete dr.diet[c.key]; redraw(); }})},String(cur)),
+          (c.description||DESC[String(c.key).toLowerCase()])&&h('p',{},c.description||DESC[String(c.key).toLowerCase()])); })),
+      kitchenNote(false)];
+    canNext=true;
+  } else if(key==='meals'){
+    body=[h('h2',{},'Meal preferences'),h('p',{class:'muted'},'These are independent of your main course. Someone can appear in several, but never more than '+att+' in one.'),lockFood&&lockNote('Food preferences are locked and can no longer be changed.'),
+      d.diet.meals.filter(s=>(s.options||[]).length).map(s=>h('section',{style:'margin-top:1.5rem'},h('h3',{},s.label),h('div',{class:'alloc'},s.options.map(o=>{ const cur=+dr.meals[o.key]||0;
+        return h('div',{class:'it'},h('span',{},o.label),h('button',{class:'cnt',disabled:lockFood,'aria-label':o.label+', '+cur+' selected. Change',onclick:()=>countSheet({id:'m-'+o.key,title:o.label,max:att,value:cur,unit:'guests',onDone:v=>{ if(v) dr.meals[o.key]=v; else delete dr.meals[o.key]; redraw(); }})},String(cur))); }))))];
+  } else if(key==='allergy'){
+    body=[h('h2',{},'Allergies and intolerances'),h('p',{class:'muted'},'Tell the kitchen how many guests are affected.'),lockFood&&lockNote('Food preferences are locked and can no longer be changed.'),
+      h('div',{class:'alloc'},d.diet.allergies.map(a=>{ const cur=+dr.allergies[a.key]||0;
+        return h('div',{class:'it'},h('span',{},a.label),h('button',{class:'cnt',disabled:lockFood,'aria-label':a.label+', '+cur+' affected. Change',onclick:()=>countSheet({id:'a-'+a.key,title:a.label,max:att,value:cur,unit:'guests',onDone:v=>{ if(v) dr.allergies[a.key]=v; else delete dr.allergies[a.key]; redraw(); }})},String(cur))); })),
+      h('div',{class:'field',style:'margin-top:1rem'},h('label',{for:'an'},'Anything else the kitchen should know? (optional)'),h('textarea',{id:'an',maxlength:'300',disabled:lockFood,value:dr.allergyNotes,oninput:e=>{ dr.allergyNotes=e.target.value; }})),
+      kitchenNote(true)];
+  } else if(key==='stay'){
+    const info=d.accommodation&&d.accommodation.instructions;
+    body=[h('h2',{},'Does your family require accommodation?'),
+      info?h('div',{class:'alert',style:'white-space:pre-wrap'},info):h('p',{class:'muted'},'The hosts haven’t shared accommodation details yet.'),
+      lockStay&&lockNote('Accommodation can no longer be changed for this wedding.'),
+      h('div',{class:'seg',role:'group','aria-label':'Accommodation required'},
+        h('button',{type:'button',disabled:lockStay,'aria-pressed':String(dr.acc.required===true),onclick:()=>{ dr.acc.required=true; if(!dr.acc.count) dr.acc.count=att; redraw(); }},'Yes'),
+        h('button',{type:'button',disabled:lockStay,'aria-pressed':String(dr.acc.required===false),onclick:()=>{ dr.acc.required=false; dr.acc.count=0; redraw(); }},'No')),
+      dr.acc.required&&(lockStay?h('p',{},h('b',{},dr.acc.count),' people need accommodation.'):h('div',{style:'margin-top:1rem'},h('p',{class:'muted',style:'margin-bottom:.5rem'},'How many need a room? Up to '+att+'.'),
+        makeDial({id:'acc',label:'People needing accommodation',values:dialValues(),value:dr.acc.count||null,max:att,unit:'people',center:'need rooms',onPick:v=>{ dr.acc.count=v; redraw(); }})))];
+    canNext=dr.acc.required!==null&&(!dr.acc.required||dr.acc.count>=1);
+  } else {
+    const unalloc=(d.diet.categories||[]).length?att-sum(dr.diet):0;
+    body=[h('h2',{},editing?'Review your changes':'Review and confirm'),h('p',{class:'muted'},'Check everything, then confirm. You can go back to change anything.'),summary(dr),
+      unalloc>0&&h('div',{class:'alert'},unalloc+' guest'+(unalloc>1?'s have':' has')+' no main-course choice yet.'),
+      ev.err&&h('div',{class:'alert bad',role:'alert'},ev.err),
+      !editing&&h('p',{class:'small muted'},'Once confirmed, your headcount is fixed. '+deadlineText())];
+    nextLabel=ev.submitting?'Saving…':(editing?'Save changes':'Confirm attendance');
+  }
+  const dirty=dirtyFn();
+  const footer=h('div',{class:'foot'},
+    h('button',{class:'btn ghost',onclick:()=>{ if(ev.step===(editing?1:0)||ev.step===0) leaveWizard(); else go(-1); }},ev.step===(editing?1:0)?'Cancel':'Back'),
+    h('button',{class:'btn',disabled:!canNext||ev.submitting||(key==='review'&&editing&&!dirty),onclick:()=>{ if(key==='review') submit(); else go(1); }},nextLabel));
+  return h('div',{},h('div',{class:'rsvp'},h('div',{class:'rhead'},h('span',{class:'muted'},'Step '+(ev.step+1)+' of '+steps.length),h('span',{class:'muted'},d.bride.name+' & '+d.groom.name)),
+    h('div',{class:'bar'},h('i',{style:'width:'+((ev.step+1)/steps.length*100)+'%'})),body),footer);
+}
+function kitchenNote(allergy){
+  const k=(S.ev.data.diet||{}).kitchen||{};
+  return h('div',{class:'alert',style:'margin-top:1.25rem'},
+    allergy?'Listing an allergy or intolerance does not guarantee the kitchen can accommodate it. ':'Dish availability depends on your hosts’ caterer. ',
+    k.strictVegetarianSeparation?'The hosts have arranged separate preparation for vegetarian food. ':'',
+    k.allergenSafePreparation?'The hosts have arranged allergen-aware preparation. ':(allergy?'For serious allergies, please speak with your hosts directly.':''));
+}
+function leaveWizard(){
+  const go=()=>{ S.ev.draft=draftFrom(S.ev.sub); S.ev.base=JSON.stringify(S.ev.draft); S.ev.mode='story'; S.ev.chapter=chapters().length-1; render(); };
+  if(dirtyFn()) confirmBox('Discard your changes?','Nothing has been saved yet.','Discard',go); else go();
+}
+function validate(){
+  const ev=S.ev,d=ev.data,dr=ev.draft,max=(d.limits&&d.limits.maxAttendance)||30,a=dr.attendance;
+  if(!Number.isInteger(a)||a<1||a>max) return 'Choose how many are attending.';
+  if(sum(dr.diet)>a) return 'Main-course allocation exceeds your headcount.';
+  for(const o of ['meals','allergies']) for(const k in dr[o]) if(dr[o][k]>a||dr[o][k]<0) return 'A selection exceeds your headcount.';
+  if(dr.acc.required===null) return 'Please answer the accommodation question.';
+  if(dr.acc.required&&(dr.acc.count<1||dr.acc.count>a)) return 'Accommodation headcount must be between 1 and '+a+'.';
+  return null;
+}
+function submit(){
+  const ev=S.ev; if(ev.submitting) return;
+  const bad=validate(); if(bad){ ev.err=bad; return render(); }
+  const d=ev.data, diet=d.diet||{}, dr=ev.draft, unalloc=(diet.categories||[]).length?dr.attendance-sum(dr.diet):0;
+  const go=()=>doSubmit();
+  if(unalloc>0) confirmBox('Some guests have no main-course choice','Submit anyway? You can change this later until the food deadline.','Submit',go); else go();
+}
+async function doSubmit(){
+  const ev=S.ev, d=ev.data, dr=ev.draft, diet=d.diet||{}, editing=!!ev.sub;
+  const pick=(obj,keys)=>Object.fromEntries(keys.filter(k=>+obj[k]>0).map(k=>[k,+obj[k]]));
+  const body={attendance:dr.attendance,diet:pick(dr.diet,(diet.categories||[]).map(c=>c.key)),
+    meals:pick(dr.meals,(diet.meals||[]).flatMap(s=>(s.options||[]).map(o=>o.key))),allergies:pick(dr.allergies,(diet.allergies||[]).map(a=>a.key)),
+    allergyNotes:(dr.allergyNotes||'').trim().slice(0,300),accommodation:{required:dr.acc.required,count:dr.acc.required?dr.acc.count:0}};
+  ev.submitting=true; ev.err=null; render();
+  try{
+    await api('/api/guest/events/'+encodeURIComponent(ev.id)+'/submission',{method:editing?'PUT':'POST',body});
+    await loadEvent(true);                       // show exactly what the backend stored
+    ev.submitting=false; ev.mode='story'; ev.chapter=chapters().length-1; toast(editing?'Your changes were saved.':'Attendance confirmed. Thank you!'); refreshEvents(); render();
+  }catch(e){
+    ev.submitting=false; if(e.kind==='auth') return handleUser(null);
+    ev.err=e.status===409?'A response for this wedding already exists. Reloading your saved information…':e.status===403?(e.message||'This can no longer be changed.'):e.message;
+    if(e.status===409||e.status===403) { try{ await loadEvent(false); }catch{} }
+    S.keepScroll=true; render();                 // original submission is untouched on failure
+  }
+}
+
+boot();
+</script>
+</body>
+</html>
