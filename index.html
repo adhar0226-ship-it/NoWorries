@@ -1282,31 +1282,26 @@
 
 
     /* Infinite Scrolling Text Marquee. */
-    .marquee-strip { display: none; }
-
-    @media (max-width: 768px) {
-      .marquee-strip {
-        display: block;
-        width: 100%;
-        overflow: hidden;
-        padding: 6px 0;
-        background: var(--color-rust);
-        color: #FFFFFF;
-      }
-      .marquee-track {
-        display: flex;
-        width: max-content;
-        animation: marquee-scroll linear infinite;
-      }
-      .marquee-group { display: flex; flex-shrink: 0; }
-      .marquee-item {
-        white-space: nowrap;
-        font-size: 0.85rem;
-        font-weight: 600;
-      }
-      .marquee-item::after { content: '✦'; margin: 0 18px; }
+    .marquee-strip {
+      width: 100%;
+      overflow: hidden;
+      padding: 6px 0;
+      background: var(--color-rust);
+      color: #FFFFFF;
     }
-
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee-scroll linear infinite;
+    }
+    .marquee-group { display: flex; flex-shrink: 0; }
+    .marquee-item {
+      white-space: nowrap;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .marquee-item::after { content: '✦'; margin: 0 18px; }
+    
     @keyframes marquee-scroll {
       to { transform: translate3d(-50%, 0, 0); }
     }
