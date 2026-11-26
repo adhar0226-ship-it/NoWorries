@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Mission — NOWORRIES</title>
+  <meta name="description" content="NOWORRIES helps hosts, guests and caterers plan food around real RSVPs, so every wedding feeds everyone with less waste and less worry.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #FAF7F2;
+      --card: #FFFFFF;
+      --sage-pill: #E2ECE5;
+      --sage-banner: #D5E0D8;
+      --charcoal: #1E1B18;
+      --muted: #5F5953;
+      --rust: #BF4F16;
+      --rust-hover: #A54211;
+      --border: #E8E2D8;
+      --border-warm: #D4CBBD;
+      --blue: #2D68C4;
+      --display: 'Playfair Display', Georgia, serif;
+      --body: 'Plus Jakarta Sans', -apple-system, "Segoe UI", Roboto, sans-serif;
+      --nav-height: 76px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--cream); color: var(--charcoal); font-family: var(--body); line-height: 1.65; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+
+    /* Nav */
+    .site-header { position: fixed; inset: 0 0 auto 0; height: var(--nav-height); background: rgba(250,247,242,.94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(212,203,189,.35); z-index: 10; }
+    .nav-container { max-width: 1360px; height: 100%; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; }
+    .brand-group { display: flex; align-items: center; gap: 12px; }
+    .logo-box { width: 38px; height: 38px; border-radius: 6px; background: var(--blue); color: #fff; font-size: .8rem; font-weight: 700; display: grid; place-items: center; box-shadow: 0 3px 8px rgba(45,104,196,.25); }
+    .brand-name { font-family: var(--display); font-size: 1.55rem; font-weight: 700; letter-spacing: .04em; }
+
+    /* Type */
+    h1, h2 { font-family: var(--display); line-height: 1.15; letter-spacing: -.01em; text-wrap: balance; }
+    h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); }
+    h2 { font-size: clamp(2rem, 3.8vw, 3rem); margin-bottom: 18px; }
+    h3 { font-size: 1.2rem; margin-bottom: 8px; }
+    em { color: var(--rust); font-style: italic; }
+    .eyebrow { color: var(--rust); font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; margin-bottom: 14px; }
+    .lead { color: var(--muted); font-size: 1.12rem; max-width: 620px; }
+    .center { text-align: center; }
+    .center .lead { margin: 0 auto; }
+    section { padding: 100px 0; }
+
+    /* Hero */
+    .hero { position: relative; padding: calc(var(--nav-height) + 90px) 0 110px; text-align: center; overflow: hidden; }
+    .hero .lead { margin: 24px auto 36px; }
+    .ring { position: absolute; border: 1.5px dashed var(--border-warm); border-radius: 50%; pointer-events: none; animation: spin 90s linear infinite; }
+    .ring::before { content: ''; position: absolute; inset: 28px; border: 1px solid var(--border); border-radius: 50%; }
+    .ring.a { width: 420px; height: 420px; top: -60px; left: -190px; }
+    .ring.b { width: 520px; height: 520px; bottom: -260px; right: -200px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn { display: inline-block; padding: 13px 34px; border-radius: 6px; background: var(--rust); color: #fff; font-weight: 600; transition: background .25s, transform .25s, box-shadow .25s; }
+    .btn:hover { background: var(--rust-hover); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(191,79,22,.3); }
+    .nav-join { margin-left: auto; padding: 8px 24px; font-size: .92rem; }
+
+    /* Mission statement */
+    .statement { background: var(--charcoal); color: var(--cream); text-align: center; }
+    .statement .eyebrow { color: #E9A57C; }
+    .statement p.big { font-family: var(--display); font-size: clamp(1.6rem, 3.4vw, 2.6rem); line-height: 1.4; max-width: 900px; margin: 0 auto; text-wrap: balance; }
+    .statement em { color: #E9A57C; }
+
+    /* Problem */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+    .pain-list { list-style: none; display: grid; gap: 16px; }
+    .pain-list li { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--rust); border-radius: 12px; padding: 22px 24px; }
+    .pain-list p, .card p, .value p, .step p { color: var(--muted); font-size: .98rem; }
+
+    /* Roles */
+    .roles { background: linear-gradient(180deg, var(--cream), #F5F1E7); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 52px; }
+    .card { background: var(--card); border-radius: 20px; padding: 34px 28px; box-shadow: 0 10px 30px rgba(35,25,15,.06); transition: transform .25s, box-shadow .25s; }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(35,25,15,.1); }
+    .icon { width: 56px; height: 56px; border-radius: 50%; background: var(--sage-pill); display: grid; place-items: center; margin-bottom: 20px; }
+    .icon svg { width: 26px; height: 26px; fill: none; stroke: var(--charcoal); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* Steps */
+    .steps { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 52px; counter-reset: step; }
+    .step { counter-increment: step; border-top: 2px dashed var(--border-warm); padding-top: 24px; }
+    .step::before { content: "0" counter(step); display: block; font-family: var(--display); font-size: 2.4rem; font-weight: 700; color: var(--rust); line-height: 1; margin-bottom: 14px; }
+
+    /* Values */
+    .values { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border-warm); border: 1px solid var(--border-warm); border-radius: 20px; overflow: hidden; margin-top: 52px; }
+    .value { background: var(--card); padding: 34px; }
+
+    /* Vision + CTA */
+    .vision { padding-top: 0; }
+    .banner { background: var(--sage-banner); border-radius: 20px; padding: 72px 32px; text-align: center; }
+    .banner .lead { margin: 0 auto 30px; color: #3D3730; }
+    footer { border-top: 1px solid var(--border); padding: 30px 20px; text-align: center; font-size: .82rem; color: #756D63; }
+
+    /* Scroll reveal (only when JS runs) */
+    .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    .js .reveal.in { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      .split, .grid-3 { grid-template-columns: 1fr; gap: 24px; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      :root { --nav-height: 68px; }
+      .nav-container { padding: 0 20px; }
+      section { padding: 70px 0; }
+      .vision { padding-top: 0; }
+      .hero { padding: calc(var(--nav-height) + 56px) 0 72px; }
+      .steps, .values { grid-template-columns: 1fr; }
+      .ring { opacity: .5; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ring { animation: none; }
+      .js .reveal { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="#" class="brand-group" aria-label="NOWORRIES Home">
+        <!-- Replace with <img> when the logo is ready -->
+        <span class="logo-box">NW</span>
+        <span class="brand-name">NOWORRIES</span>
+      </a>
+      <a href="#" class="btn nav-join">Join</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="ring a" aria-hidden="true"></div>
+      <div class="ring b" aria-hidden="true"></div>
+      <div class="container">
+        <div class="eyebrow">Our Mission</div>
+        <h1>Every guest fed.<br><em>Every host at peace.</em></h1>
+        <p class="lead">A wedding should be remembered for its laughter, rituals and food shared together, not for frantic phone calls about how many plates to make.</p>
+        <a href="#" class="btn">Join NOWORRIES</a>
+      </div>
+    </section>
+
+    <section class="statement">
+      <div class="container reveal">
+        <div class="eyebrow">Why we exist</div>
+        <p class="big">To replace guesswork with <em>real answers</em>, so food is planned for the people who are actually coming.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container split">
+        <div class="reveal">
+          <div class="eyebrow">The problem</div>
+          <h2>Nobody knows the real number.</h2>
+          <p class="lead">Invitations go out, replies trickle in across calls and chats, and the kitchen still has to commit. That uncertainty costs everyone.</p>
+        </div>
+        <ul class="pain-list">
+          <li class="reveal"><h3>Food goes to waste</h3><p>Cooking extra "just in case" leaves good food, effort and money behind.</p></li>
+          <li class="reveal"><h3>Or it runs short</h3><p>An unexpected rush can leave guests waiting and families embarrassed.</p></li>
+          <li class="reveal"><h3>Hosts carry the stress</h3><p>The people who should be celebrating end up chasing replies and headcounts.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="roles">
+      <div class="container">
+        <div class="center reveal">
+          <div class="eyebrow">Who we're for</div>
+          <h2>Three people. One shared picture.</h2>
+          <p class="lead">When everyone sees the same information, nobody has to guess.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card reveal">
+            <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h14V10M10 20v-6h4v6"/></svg></div>
+            <h3>Hosts</h3>
+            <p>Create your event, see RSVPs in one place and stay with your family instead of your phone.</p>
+          </article>
+          <article class="card reveal">
+            <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></div>
+            <h3>Guests</h3>
+            <p>Reply in moments and share your food preferences, so there is something on the table for you.</p>
+          </article>
+          <article class="card reveal">
+            <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17h18M5 17a7 7 0 0 1 14 0M12 10V7M10 7h4M4 20h16"/></svg></div>
+            <h3>Caterers</h3>
+            <p>Plan quantities around real counts and let the host know when each food category is ready.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="center reveal">
+          <div class="eyebrow">How we get there</div>
+          <h2>From invitation to last plate.</h2>
+        </div>
+        <ol class="steps">
+          <li class="step reveal"><h3>Invite</h3><p>The host sets up the event and shares access with guests.</p></li>
+          <li class="step reveal"><h3>RSVP</h3><p>Guests confirm whether they are coming and what they eat.</p></li>
+          <li class="step reveal"><h3>Prepare</h3><p>The caterer plans the kitchen around those numbers.</p></li>
+          <li class="step reveal"><h3>Celebrate</h3><p>Food readiness is visible, and the family can simply enjoy.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="roles">
+      <div class="container">
+        <div class="center reveal">
+          <div class="eyebrow">What we stand for</div>
+          <h2>Our promises to you.</h2>
+        </div>
+        <div class="values reveal">
+          <div class="value"><h3>Simple for everyone</h3><p>From college friends to grandparents, using it should need no instructions.</p></div>
+          <div class="value"><h3>Respect for food</h3><p>Better counts mean less cooked only to be thrown away.</p></div>
+          <div class="value"><h3>Respect for tradition</h3><p>Every family and community eats differently. Planning should honour that.</p></div>
+          <div class="value"><h3>Clarity over chaos</h3><p>One reliable source instead of scattered lists, calls and messages.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="vision" style="margin-top: 90px;">
+      <div class="container">
+        <div class="banner reveal">
+          <div class="eyebrow">Where we're going</div>
+          <h2>Weddings first. Then every gathering.</h2>
+          <p class="lead">We are starting where the stakes feel highest, and we hope to bring the same calm to more kinds of events.</p>
+          <a href="#" class="btn">Join NOWORRIES</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>&copy; 2026 NOWORRIES. All rights reserved.</footer>
+
+  <script>
+    if ('IntersectionObserver' in window) {
+      document.documentElement.classList.add('js');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+  </script>
+</body>
+</html>
