@@ -380,6 +380,19 @@
       transform: translateX(4px);
     }
 
+    .nav-auth-mobile { display: none; }
+
+    @media (max-width: 1080px) {
+      .nav-actions > .btn-sign-in,
+      .nav-actions > .btn-sign-up-nav { display: none; }
+
+      .nav-auth-mobile {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+    }
+
     .brand-logo-img {
       max-height: 38px;
       width: auto;
@@ -445,40 +458,13 @@
       gap: 14px;
     }
 
-    .btn-hero-host {
-      border: 1.5px solid var(--color-border-warm);
-      background-color: #FFFFFF;
-      color: #38312B;
-      border-radius: var(--radius-sm);
-      padding: 12px 22px;
+    .hero-mission-link {
       font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      padding: 11px 6px;
     }
-    .btn-hero-host:hover {
-      border-color: var(--color-rust);
-      color: var(--color-rust);
-    }
-
-    .btn-hero-guest {
-      background-color: var(--color-rust);
-      color: #FFFFFF;
-      border-radius: var(--radius-sm);
-      padding: 12px 22px;
-      font-weight: 600;
-    }
-    .btn-hero-guest:hover {
-      background-color: var(--color-rust-hover);
-    }
-
-    .btn-hero-caterer {
-      background-color: var(--color-sage-btn);
-      color: #FFFFFF;
-      border-radius: var(--radius-sm);
-      padding: 12px 22px;
-      font-weight: 600;
-    }
-    .btn-hero-caterer:hover {
-      background-color: var(--color-sage-btn-hover);
-    }
+    .hero-mission-link:hover { color: var(--color-rust); }
 
     .hero-visual-col {
       position: relative;
@@ -1293,9 +1279,70 @@
         padding: 44px 20px;
       }
     }
+
+
+    /* Infinite Scrolling Text Marquee. */
+    .marquee-strip { display: none; }
+
+    @media (max-width: 768px) {
+      .marquee-strip {
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        padding: 6px 0;
+        background: var(--color-rust);
+        color: #FFFFFF;
+      }
+      .marquee-track {
+        display: flex;
+        width: max-content;
+        animation: marquee-scroll linear infinite;
+      }
+      .marquee-group { display: flex; flex-shrink: 0; }
+      .marquee-item {
+        white-space: nowrap;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+      .marquee-item::after { content: '✦'; margin: 0 18px; }
+    }
+
+    @keyframes marquee-scroll {
+      to { transform: translate3d(-50%, 0, 0); }
+    }
+
+    /* Background with parallax */
+    .site-bg {
+      position: fixed;
+      top: -40px;
+      left: -40px;
+      width: calc(100% + 80px);
+      height: calc(100vh + 80px);
+      height: calc(100lvh + 80px);
+      z-index: -1;
+      background: url('background.jpg') center / cover no-repeat;
+      filter: blur(6px);
+      pointer-events: none;
+      will-change: transform;
+    }
+    .site-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(250, 247, 242, 0.55); /* higher = fainter image */
+    }
+
+    /* let the image show through the solid sections */
+    .tailored-section { background: linear-gradient(180deg, rgba(250,247,242,0.55), rgba(245,241,231,0.7)); }
+    .testimonials-section { background: rgba(250, 246, 240, 0.6); }
+    .site-footer { background-color: rgba(250, 247, 242, 0.75); }
+
   </style>
 </head>
 <body>
+
+  <!-- Background with parallax -->
+   <div class="site-bg" aria-hidden="true"></div>
 
   <!-- ==========================================================================
        FLOATING NAVIGATION BAR (Disappears on scroll down, reappears on scroll up)
@@ -1332,6 +1379,10 @@
     <!-- Dropdown Navigation Overlay (Revealed on hamburger click) -->
     <div class="nav-dropdown-overlay" id="navDropdownOverlay">
       <div class="nav-dropdown-inner">
+        <div class="nav-auth-mobile">
+          <a href="#" class="btn-sign-in menu-link">Sign In</a>
+          <a href="#" class="btn btn-sign-up-nav menu-link">Sign Up</a>
+        </div>
         <div>
           <div class="nav-group-title">Explore Sections</div>
           <ul class="nav-links-list">
@@ -1387,18 +1438,10 @@
 
             <!-- Three Distinct Role Actions as specified in requirements -->
             <div class="hero-ctas">
-              <a href="host/index.html" class="btn btn-hero-host" id="heroHostBtn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                Join as Host
-              </a>
-              <a href="guest/index.html" class="btn btn-hero-guest" id="heroGuestBtn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                Join as Guest
-              </a>
-              <a href="caterer/index.html" class="btn btn-hero-caterer" id="heroCatererBtn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"></path><line x1="6" y1="17" x2="18" y2="17"></line></svg>
-                Join as Caterer
-              </a>
+              <div class="hero-ctas">
+              <a href="#" class="btn btn-rust" id="heroJoinBtn">Join</a>
+              <a href="#" class="hero-mission-link">Our Mission</a>
+            </div>
             </div>
           </div>
 
@@ -1413,6 +1456,17 @@
         </div>
       </div>
     </section>
+
+<!-- 1.5 Infinite Scrolling Text Marquee. -->
+    <div class="marquee-strip">
+      <div class="marquee-track">
+        <div class="marquee-group">
+          <span class="marquee-item">Smart RSVP Tracking</span>
+          <span class="marquee-item">Accurate Food Counts</span>
+          <span class="marquee-item">Stress-Free Weddings</span>
+        </div>
+      </div>
+    </div>
 
     <!-- 2. THE PROBLEM (CHAOS) SECTION (Reference: media_1795286421470_9e4e6236.jpg) -->
     <section class="chaos-section" id="problem">
@@ -2060,6 +2114,36 @@
           }
         });
       });
+
+      // Infinite Scrolling Text Marquee.
+      const marqueeTrack = document.querySelector('.marquee-track');
+      if (marqueeTrack) {
+        const marqueeGroup = marqueeTrack.querySelector('.marquee-group');
+        marqueeGroup.innerHTML = marqueeGroup.innerHTML.repeat(10); // fills the width even with 1 phrase
+        marqueeTrack.appendChild(marqueeGroup.cloneNode(true));     // seamless loop
+        marqueeTrack.style.animationDuration = (marqueeGroup.children.length * 4) + 's'; // higher = slower
+      }
+
+      // Background with parallax
+      const siteBg = document.querySelector('.site-bg');
+      if (siteBg) {
+        let targetX = 0, targetY = 0, currentX = 0, currentY = 0, bgFrame = null;
+
+        function moveBg() {
+          currentX += (targetX - currentX) * 0.05;
+          currentY += (targetY - currentY) * 0.05;
+          siteBg.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+          const moving = Math.abs(targetX - currentX) > 0.1 || Math.abs(targetY - currentY) > 0.1;
+          bgFrame = moving ? requestAnimationFrame(moveBg) : null;
+        }
+
+        window.addEventListener('pointermove', function(e) {
+          if (e.pointerType !== 'mouse') return;
+          targetX = (0.5 - e.clientX / window.innerWidth) * 36;  // max ±18px, opposite to cursor
+          targetY = (0.5 - e.clientY / window.innerHeight) * 36;
+          if (!bgFrame) bgFrame = requestAnimationFrame(moveBg);
+        }, { passive: true });
+      }
 
       // 5. CONSOLE VERIFICATION & READINESS LOG
       console.log('NOWORRIES Landing Page initialized with visual fidelity and responsive architecture.');
