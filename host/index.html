@@ -308,47 +308,6 @@ h1,h2,h3{font-family:var(--font-display);font-weight:700;letter-spacing:-.01em;l
    BACKEND CONFIGURATION (the only one):
    ========================================================================== */
 const api_url = "https://noworries-backend-70ij.onrender.com";
-
-/* ==========================================================================
-   REQUIRED BACKEND CONTRACT  (nothing here is mocked; every call hits api_url)
-   --------------------------------------------------------------------------
-   Auth: protected calls send  Authorization: Bearer <Firebase ID token>.
-   Errors: non-2xx JSON  { "message": "..." }.
-
-   GET    /health                                   -> 2xx when alive
-   GET    /api/config/firebase                      -> public Firebase WEB config
-                                                      { apiKey, authDomain, projectId, appId, databaseURL, storageBucket, messagingSenderId }
-   POST   /api/auth/host/register   {name,email,phone,password}   (creates Firebase user, host role, permanent Host ID)
-   POST   /api/auth/host/forgot-password {email}
-   GET    /api/host/me                              -> { hostId, name, email, phone, role:"host" }  (403 for non-host accounts)
-   PATCH  /api/host/me {name,phone}                 -> updated host
-   GET    /api/host/events                          -> { events:[{id,eventCode,brideName,groomName,weddingDate,venue,...}] }
-   POST   /api/host/events                          -> { event:{id,eventCode,...} }   (server generates XXXX-XXXX-XXXX)
-   GET    /api/host/events/:id                      -> { event:{id,eventCode,brideName,groomName,bridePhotoUrl,groomPhotoUrl,venue,
-                                                       weddingDate:"YYYY-MM-DD",dressCode,guestMessage,accommodationInfo,
-                                                       timeline:[{name,date,time,description}], realtimePath } }
-   PATCH  /api/host/events/:id                      -> { event }
-   POST   /api/host/events/:id/regenerate-id        -> { eventCode }
-   PUT    /api/host/events/:id/pin {pin}            -> 2xx   (PIN stored hashed; never returned)
-   GET    /api/host/events/:id/analytics            -> { families, confirmedAttendees, pendingConfirmations?,
-                                                       diets:[{key,label,count}], allergies:[{key,label,count}],
-                                                       specialRequirements:[{label,count}],
-                                                       meals:[{category,label,items:[{name,quantity}]}],
-                                                       accommodation:{total} }
-   GET    /api/host/events/:id/guests               -> { families:[{id,familyName,status,confirmedCount,totalMembers,diets:[{label,count}]}] }
-   GET    /api/host/events/:id/accommodation        -> { total, distribution:[{label,count}], families:[{familyName,guests,details}] }
-   GET    /api/host/events/:id/food-config          -> { config:{diets:{key:bool},allergies:[{key,label,accommodated}],
-                                                       separation:"strict"|"cross_contamination_permitted",
-                                                       meals:{welcome|starters|main|accompaniments|desserts:{enabled,options:[]}}} | null }
-   PUT    /api/host/events/:id/food-config {config} -> 2xx
-   GET    /api/host/events/:id/preparation          -> { categories:[{key,label,status:"ready"|"not_ready",updatedAt?}] }
-   POST   /api/host/uploads/photo (multipart: file, kind:"bride"|"groom") -> { url, path }
-
-   Realtime: event.realtimePath is a Realtime Database path the host's Firebase token is
-   authorised (by database rules) to read. Changes only trigger a re-fetch from the REST API,
-   so the backend stays the authority for all displayed data.
-   ========================================================================== */
-
 (function(){
 'use strict';
 
