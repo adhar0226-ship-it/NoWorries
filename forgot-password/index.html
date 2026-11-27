@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://*.onrender.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Forgot Password — NOWORRIES</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-cream:#FAF7F2; --bg-card:#FFFFFF; --color-charcoal:#1E1B18; --color-text-muted:#5F5953;
+  --color-rust:#BF4F16; --color-rust-hover:#A54211; --color-border-warm:#D4CBBD; --color-accent-blue:#2D68C4;
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;background:var(--bg-cream);color:var(--color-charcoal);font-family:var(--font-body);line-height:1.6}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--color-rust);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+nav{display:flex;align-items:center;gap:16px;height:76px;padding:0 20px;border-bottom:1px solid var(--color-border-warm)}
+.back{display:grid;place-items:center;width:40px;height:40px;border-radius:50%}
+.back:hover{color:var(--color-rust)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{display:grid;place-items:center;width:38px;height:38px;border-radius:6px;background:var(--color-accent-blue);color:#fff;font-size:.8rem;font-weight:700}
+.name{font-family:var(--font-display);font-size:1.4rem;letter-spacing:.04em}
+main{flex:1;display:grid;place-items:center;padding:24px 20px}
+form{width:100%;max-width:400px;display:grid;gap:14px;padding:32px 24px;background:var(--bg-card);border:1px solid var(--color-border-warm);border-radius:12px;box-shadow:0 10px 30px rgba(35,25,15,.06)}
+input,button{width:100%;min-height:48px;border-radius:6px;font:inherit;font-size:1rem}
+input{padding:0 14px;border:1px solid var(--color-border-warm)}
+button{border:0;background:var(--color-rust);color:#fff;font-weight:600;cursor:pointer}
+button:hover:not(:disabled){background:var(--color-rust-hover)}
+button:disabled{opacity:.6;cursor:not-allowed}
+#status{font-size:.92rem;text-align:center;color:var(--color-text-muted)}
+#status:empty{display:none}
+#status.error{color:#B3261E}
+</style>
+</head>
+<body>
+<nav aria-label="Main">
+  <a class="back" href="#" aria-label="Go back">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  </a>
+  <a class="brand" href="#" aria-label="NOWORRIES Home">
+    <span class="logo" aria-hidden="true">NW</span>
+    <span class="name">NOWORRIES</span>
+  </a>
+</nav>
+
+<main>
+  <h1 class="sr">Forgot password</h1>
+  <form id="resetForm" method="post" novalidate>
+    <label class="sr" for="email">Email address</label>
+    <input id="email" type="email" placeholder="Enter email" autocomplete="email" autocapitalize="none" spellcheck="false" maxlength="254" required>
+    <button id="submitBtn" type="submit">Send Reset Link</button>
+    <p id="status" role="status" aria-live="polite"></p>
+    <noscript><p>Please enable JavaScript to reset your password.</p></noscript>
+  </form>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const api_base_url = "https://your-render-backend.onrender.com";
+
+  // The backend handler ignores the role segment: the reset applies to the email's account only.
+  const RESET_PATH = '/api/auth/host/forgot-password';
+  const SENT = 'If an account exists for that email, a reset link is on its way.';
+  const COOLDOWN_MS = 60000;
+
+  const form = document.getElementById('resetForm');
+  const input = document.getElementById('email');
+  const button = document.getElementById('submitBtn');
+  const status = document.getElementById('status');
+  let busy = false;
+
+  const show = (text, isError) => {
+    status.textContent = text;
+    status.classList.toggle('error', !!isError);
+  };
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (busy) return;
+
+    const email = input.value.trim().toLowerCase();
+    if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      show('Enter a valid email address.', true);
+      input.focus();
+      return;
+    }
+
+    busy = true;
+    button.disabled = true;
+    show('Sending…');
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 60000); // allows for a Render cold start
+    let accepted = false;
+
+    try {
+      const res = await fetch(api_base_url + RESET_PATH, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ email }),
+        credentials: 'omit',
+        cache: 'no-store',
+        redirect: 'error',
+        referrerPolicy: 'no-referrer',
+        signal: controller.signal
+      });
+      // Server response text is never displayed.
+      if (res.status === 202) {
+        accepted = true;
+        form.reset();
+        show(SENT);
+      } else if (res.status === 429) {
+        show('Too many attempts. Please try again later.', true);
+      } else {
+        show('Unable to process your request. Please try again.', true);
+      }
+    } catch {
+      show('Unable to connect. Check your connection and try again.', true);
+    } finally {
+      clearTimeout(timer);
+      const release = () => { busy = false; button.disabled = false; };
+      if (accepted) setTimeout(release, COOLDOWN_MS);
+      else release();
+    }
+  });
+})();
+</script>
+</body>
+</html>
