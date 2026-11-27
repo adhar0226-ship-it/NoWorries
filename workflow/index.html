@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How It Works — NOWORRIES</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FAF7F2;--ink:#1E1B18;--muted:#5F5953;--rust:#BF4F16;--line:#E8E2D8;--sage:#E2ECE5;--blue:#2D68C4;--green:#2f6b4a;--display:'Playfair Display',Georgia,serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font:16px/1.55 'Plus Jakarta Sans',system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+header{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 32px;background:rgba(250,247,242,.96);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:38px;height:38px;border-radius:6px;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.8rem}
+.name{font:700 1.5rem var(--display);letter-spacing:.04em}
+.btn{background:var(--rust);color:#fff;padding:10px 20px;border-radius:6px;font-weight:600;white-space:nowrap}
+.btn:hover{background:#A54211}
+section{max-width:1080px;margin:0 auto;padding:56px 20px;scroll-margin-top:60px}
+h1,h2{font-family:var(--display);line-height:1.15;text-align:center}
+h1{font-size:clamp(2.2rem,6vw,3.6rem)}
+h2{font-size:clamp(1.7rem,4vw,2.4rem);margin-bottom:8px}
+.sub{text-align:center;color:var(--muted);margin:10px auto 32px}
+
+.roles{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:center}
+.role{background:#fff;border:2px solid var(--c);border-radius:16px;padding:22px;text-align:center;transition:transform .2s}
+.role:hover{transform:translateY(-4px)}
+.role i{display:block;font-style:normal;font-size:2.6rem}
+.role b{display:block;font-size:1.2rem;color:var(--c)}
+.arrow{font-size:1.8rem;color:var(--muted);text-align:center}
+.arrow::after{content:'→'}
+.host{--c:#BF4F16}.guest{--c:#2D68C4}.cater{--c:#2f6b4a}
+
+.keys{background:var(--ink);color:#fff;border-radius:20px;padding:36px 20px;display:flex;flex-wrap:wrap;justify-content:center;gap:36px 56px;text-align:center}
+.keys small{display:block;color:#d4cbbd;margin-bottom:10px}
+.boxes{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap}
+.boxes span{background:#fff;color:var(--ink);border-radius:6px;padding:10px 12px;font:700 1.2rem ui-monospace,Menlo,monospace;letter-spacing:.12em}
+.pin span{width:46px;padding:10px 0}
+.keys p{width:100%;color:#d4cbbd}
+
+.flow{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;margin-top:28px;counter-reset:s}
+.flow li{counter-increment:s;background:#fff;border:1px solid var(--line);border-top:5px solid var(--c);border-radius:14px;padding:22px 16px;text-align:center;position:relative}
+.flow li::before{content:counter(s);position:absolute;top:10px;left:10px;width:28px;height:28px;border-radius:50%;background:var(--c);color:#fff;font-weight:700;font-size:.85rem;display:grid;place-items:center}
+.flow i{display:block;font-style:normal;font-size:2.4rem;margin:8px 0}
+.flow b{display:block}
+.flow span{color:var(--muted);font-size:.9rem}
+h2 .tag{color:var(--c)}
+@media(min-width:1000px){#guest .flow{grid-template-columns:repeat(6,1fr);gap:12px}#guest .flow li{padding:22px 8px}}
+
+.loop{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px}
+.chip{background:var(--sage);border-radius:99px;padding:12px 20px;font-weight:600}
+.lock{max-width:640px;margin:36px auto 0;text-align:center}
+.bar{display:flex;border-radius:99px;overflow:hidden;color:#fff;font-weight:600;font-size:.9rem;margin-top:12px}
+.bar div{padding:12px 8px}
+.bar .open{flex:2;background:var(--green)}.bar .closed{flex:1;background:var(--rust)}
+.status{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-top:28px;font-weight:600}
+.status span::before{content:'';display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px;background:#d33}
+.status span+span::before{background:#3cb371}
+
+.cta{text-align:center;background:var(--sage);padding:56px 20px}
+.cta .btn{display:inline-block;margin-top:20px;padding:14px 32px}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px}
+
+@media(max-width:760px){
+  header{padding:12px 16px}.logo{width:34px;height:34px}.name{font-size:1.15rem}.btn{padding:8px 12px;font-size:.85rem}
+  .roles{grid-template-columns:1fr}.arrow::after{content:'↓'}
+  section{padding:40px 16px}
+}
+</style>
+</head>
+<body>
+<header>
+  <a href="#" class="brand" aria-label="NOWORRIES Home"><span class="logo">NW</span><span class="name">NOWORRIES</span></a>
+  <a href="#" class="btn">Ready to Join</a>
+</header>
+
+<main>
+<section>
+  <h1>One wedding. Three roles.<br>Zero guesswork.</h1>
+  <p class="sub">Tap your role to see your steps.</p>
+  <div class="roles">
+    <a class="role host" href="#host"><i>🏡</i><b>Host</b>Creates the event</a>
+    <div class="arrow" aria-hidden="true"></div>
+    <a class="role guest" href="#guest"><i>💌</i><b>Guest</b>Sends the RSVP</a>
+    <div class="arrow" aria-hidden="true"></div>
+    <a class="role cater" href="#caterer"><i>🍽️</i><b>Caterer</b>Prepares the food</a>
+  </div>
+</section>
+
+<section>
+  <div class="keys">
+    <div><small>12-character Event ID</small><div class="boxes"><span>XXXX</span>–<span>XXXX</span>–<span>XXXX</span></div></div>
+    <div><small>4-digit PIN</small><div class="boxes pin"><span>•</span><span>•</span><span>•</span><span>•</span></div></div>
+    <p>🔑 The Host gets the ID and chooses the PIN. Guests and the Caterer need both to join.</p>
+  </div>
+</section>
+
+<section id="host" class="host">
+  <h2><span class="tag">Host</span> journey</h2>
+  <ol class="flow">
+    <li><i>👤</i><b>Sign up</b><span>Create your Host account</span></li>
+    <li><i>💍</i><b>Create event</b><span>Couple, date, venue, schedule</span></li>
+    <li><i>🍛</i><b>Set the menu</b><span>Diets, dishes, allergies</span></li>
+    <li><i>📤</i><b>Share access</b><span>Send the Event ID and PIN</span></li>
+    <li><i>📊</i><b>Track it all</b><span>Headcount, food, rooms</span></li>
+  </ol>
+</section>
+
+<section id="guest" class="guest">
+  <h2><span class="tag">Guest</span> journey</h2>
+  <ol class="flow">
+    <li><i>👤</i><b>Sign up</b><span>One account per family</span></li>
+    <li><i>🔑</i><b>Join</b><span>Enter Event ID and PIN</span></li>
+    <li><i>💌</i><b>Open invite</b><span>Details and schedule</span></li>
+    <li><i>👨‍👩‍👧</i><b>Count heads</b><span>How many are coming</span></li>
+    <li><i>🥗</i><b>Pick food &amp; stay</b><span>Diet, allergies, rooms</span></li>
+    <li><i>✅</i><b>Confirm</b><span>Review and submit</span></li>
+  </ol>
+</section>
+
+<section id="caterer" class="cater">
+  <h2><span class="tag">Caterer</span> journey</h2>
+  <ol class="flow">
+    <li><i>👤</i><b>Sign up</b><span>Create your Caterer account</span></li>
+    <li><i>🔑</i><b>Join</b><span>Enter Event ID and PIN</span></li>
+    <li><i>📋</i><b>See totals</b><span>Plates, diets, allergies</span></li>
+    <li><i>👩‍🍳</i><b>Prepare</b><span>Plan by meal category</span></li>
+    <li><i>🟢</i><b>Mark ready</b><span>The Host sees your status</span></li>
+  </ol>
+</section>
+
+<section>
+  <h2>How it all connects</h2>
+  <p class="sub">Updates flow from one role to the next.</p>
+  <div class="loop">
+    <span class="chip">💌 Guests reply</span>➜
+    <span class="chip">🔢 Counts update</span>➜
+    <span class="chip">👩‍🍳 Caterer cooks</span>➜
+    <span class="chip">🏡 Host watches progress</span>
+  </div>
+  <div class="status"><span>Not Ready</span><span>Ready</span></div>
+  <div class="lock">
+    <b>⏳ Plans change? Edit in time.</b>
+    <div class="bar"><div class="open">Food &amp; stay edits open</div><div class="closed">Last 48 hours: locked</div></div>
+    <p class="sub">Your headcount stays fixed once you confirm it.</p>
+  </div>
+</section>
+
+<div class="cta">
+  <h2>Ready to celebrate without worries?</h2>
+  <a href="#" class="btn">Ready to Join</a>
+</div>
+</main>
+<footer>© 2026 NOWORRIES. All rights reserved.</footer>
+</body>
+</html>
