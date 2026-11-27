@@ -162,43 +162,6 @@ dialog .in>*{max-width:100%}
 <div id="live" class="sr" aria-live="polite" style="position:absolute;left:-9999px"></div>
 
 <script type="module">
-/* =====================================================================
-   NOWORRIES Guest Portal
-   ---------------------------------------------------------------------
-   Backend contracts this portal expects (none were provided, so these are
-   REQUIRED endpoints — confirm/implement them on the Render backend).
-   All except /health and /api/public/firebase-config and
-   /api/guest/register require "Authorization: Bearer <Firebase ID token>"
-   and must be authorised server-side (role = guest, ownership checks).
-
-   GET  /health
-   GET  /api/public/firebase-config   -> { apiKey, authDomain, projectId, appId }   (Web SDK config;
-                                         needed so ONLY api_url must be set here)
-   POST /api/guest/register           { name, address, phone, email, password }
-                                       -> 201 { guestId }  (creates Firebase user, global email
-                                          uniqueness, guest role, permanent Guest ID; 409 if email exists)
-   GET  /api/guest/me                 -> { guest:{ guestId, name, address, phone, email } }
-                                       (401 bad token, 403 non-guest role)
-   GET  /api/guest/events             -> { events:[{ eventId, brideName, groomName, date, venue,
-                                          photoUrl, attendanceStatus:"confirmed"|"pending", timeZone }] }
-   POST /api/guest/events/join        { eventId:"XXXX-XXXX-XXXX", pin:"1234" } -> { event } (409 duplicate)
-   GET  /api/guest/events/:eventId    -> { event, submission|null }
-        event: { hostName, bride:{name,photoUrl}, groom:{name,photoUrl}, message, venue, date,
-                 timeZone, dressCode, accommodation:{ instructions }|null, timeline:[{title,date,time,description}],
-                 limits:{ maxAttendance },
-                 diet:{ categories:[{key,label,description}],
-                        meals:[{key,label,options:[{key,label}]}],
-                        allergies:[{key,label}],
-                        kitchen:{ strictVegetarianSeparation, allergenSafePreparation } },
-                 permissions:{ canSubmit, canEditFood, canEditAccommodation },   <- computed by SERVER
-                 foodEditDeadline (ISO, 48h before event, event-local) }
-        submission: { attendance, diet:{[catKey]:n}, meals:{[optKey]:n}, allergies:{[key]:n},
-                      allergyNotes, accommodation:{required,count}, submittedAt, updatedAt }
-   POST /api/guest/events/:eventId/submission   first confirmation (atomic, idempotent per guest)
-   PUT  /api/guest/events/:eventId/submission   edits (server keeps attendance fixed, enforces deadline)
-        body: { attendance, diet, meals, allergies, allergyNotes, accommodation }
-   Live updates: the portal re-fetches the event every 60s while open (no private data of other guests).
-   ===================================================================== */
 const api_url = "https://noworries-backend-70ij.onrender.com";
 
 /* ---------- tiny DOM helpers (textContent only -> no XSS) ---------- */
