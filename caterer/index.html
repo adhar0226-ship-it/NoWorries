@@ -236,51 +236,6 @@ h1,h2,h3{font-family:var(--font-display);font-weight:700;letter-spacing:-.01em;l
 <div id="modalRoot"></div>
 <script>
 const api_url = "https://noworries-backend-70ij.onrender.com";
-
-/* ==========================================================================
-   NOWORRIES CATERER PORTAL
-   --------------------------------------------------------------------------
-   Reuses the Host Portal's established contract:
-     GET  /health                      -> 2xx when alive
-     GET  /api/config/firebase         -> public Firebase WEB config
-   Protected calls send  Authorization: Bearer <Firebase ID token>.
-   Errors: non-2xx JSON  { "message": "..." }.
-
-   CATERER ENDPOINTS THIS PORTAL NEEDS (NOT yet established — the backend must
-   implement them; nothing is mocked here, so each feature stays unavailable
-   until its endpoint exists). Every one must verify the ID token, the
-   server-assigned "caterer" role, and event membership. Wrong Event ID and
-   wrong PIN must return the SAME generic 403/404 JSON message (no enumeration).
-
-   POST   /api/auth/caterer/register {businessName,contactName,phone,email,password}
-          -> 201 { catererId }  (server creates Firebase user, sets caterer role claim,
-             generates permanent Caterer ID; client can never send a role)
-   POST   /api/auth/caterer/forgot-password {email}
-   GET    /api/caterer/me            -> { catererId, businessName, contactName, email, phone, role:"caterer" } (403 otherwise)
-   PATCH  /api/caterer/me {businessName,contactName,phone} -> updated caterer
-   GET    /api/caterer/events        -> { events:[{ id, brideName, groomName, weddingDate, venue,
-                                                    categoryCount, readyCount }] }   (memberships only)
-   POST   /api/caterer/events/join {eventCode:"XXXX-XXXX-XXXX", pin:"1234"}
-          -> { event:{ id,... } }; 409 if already a member; rate-limited; PIN checked hashed, server-side
-   GET    /api/caterer/events/:id    -> { event:{ id, brideName, groomName, weddingDate, venue,
-                                                  timeline:[{name,date,time,description}],
-                                                  preparationInstructions?, realtimePath } }
-   GET    /api/caterer/events/:id/requirements
-          -> { confirmedAttendees?, separation?:"strict"|"cross_contamination_permitted",
-               diets:[{key,label,count}], allergies:[{key,label,count}],
-               specialRequirements:[{label,count}],
-               meals:[{category,label,items:[{name,quantity}]}] }
-             (aggregates only: no names, phones, accommodation or credentials)
-   GET    /api/caterer/events/:id/preparation
-          -> { categories:[{ key,label,status:"ready"|"not_ready",updatedAt? }] }  (default not_ready)
-   PUT    /api/caterer/events/:id/preparation/:key {status:"ready"|"not_ready"}
-          -> { category:{ key,label,status,updatedAt } }  (persisted; Host Portal reads the same record)
-   DELETE /api/caterer/events/:id/membership -> 2xx (caterer leaves the event)
-
-   Realtime: event.realtimePath is a Realtime Database path the caterer's token may read
-   (by database rules). A change only triggers a re-fetch from the REST API above.
-   ========================================================================== */
-
 (function(){
 'use strict';
 
